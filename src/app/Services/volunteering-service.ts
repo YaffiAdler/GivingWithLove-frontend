@@ -4,6 +4,7 @@ import { VolunteeringModule } from '../Models/volunteering/volunteering/voluntee
 import { Observable } from 'rxjs';
 import { SubProjectService } from './sub-project-service';
 import { SubProjectModule } from '../Models/sub-project/sub-project-module';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ import { SubProjectModule } from '../Models/sub-project/sub-project-module';
 export class VolunteeringService {
   http = inject(HttpClient );
 
-BASE_URL: string ='https://localhost:7016/api/Volunteering';
+BASE_URL: string = `${environment.apiUrl}/api/Volunteering`;
 volunteerings$!: Observable<VolunteeringModule[]>;
 subProjectsrv=inject(SubProjectService)
 volunteerings:VolunteeringModule[]=[];

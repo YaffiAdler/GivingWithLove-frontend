@@ -1,5 +1,5 @@
 // import { Component, inject, OnInit } from '@angular/core';
-// import { VolunteerModule } from '../../../Models/volunteer/volunteer-module';
+// import { VolunteerModel } from '../../../Models/volunteer/volunteer-module';
 // import { VolunteeringModule } from '../../../Models/volunteering/volunteering/volunteering-module';
 // import { VolunteeringService } from '../../../Services/volunteering-service';
 // import { VolunteerService } from '../../../Services/volunteer-service';
@@ -45,7 +45,7 @@
 //   //   @Inject(MAT_DIALOG_DATA) public data: { volunteerCode: string }
 //   // ) {}
 
-//   volunteer!: VolunteerModule;
+//   volunteer!: VolunteerModel;
 //   volunteerings: VolunteeringModule[] = [];
 
 //   // נתונים ל-PrimeNG Pie Chart
@@ -241,7 +241,7 @@
 // }
 
 import { Component, inject, OnInit } from '@angular/core';
-import { VolunteerModule } from '../../../Models/volunteer/volunteer-module';
+import { VolunteerModel } from '../../../Models/volunteer/volunteer-module';
 import { VolunteeringModule } from '../../../Models/volunteering/volunteering/volunteering-module';
 import { VolunteeringService } from '../../../Services/volunteering-service';
 import { VolunteerService } from '../../../Services/volunteer-service';
@@ -277,7 +277,7 @@ export class VolunteerDetails implements OnInit {
   data = inject(MAT_DIALOG_DATA) as { volunteerCode: string };
 
   // ===== data =====
-  volunteer!: VolunteerModule;
+  volunteer!: VolunteerModel;
   volunteerings: VolunteeringModule[] = [];
 
   pieChartDataForPrime: any;
@@ -302,9 +302,13 @@ export class VolunteerDetails implements OnInit {
       this.volunteer = this.volunteerService.volunteers
         .find(v => v.volunteerCode === Number(volunteerCode))!;
     } else {
-      this.volunteer = await lastValueFrom(
-        this.volunteerService.getVolunteerById(Number(volunteerCode))
-      );
+      try {
+        this.volunteer = await lastValueFrom(
+          this.volunteerService.getVolunteerById(Number(volunteerCode))
+        );
+      } catch (err) {
+        console.error('Failed to load volunteer', err);
+      }
     }
 
     if (!this.volunteer) return;
@@ -318,9 +322,14 @@ export class VolunteerDetails implements OnInit {
           new Date(b.dateOfVolunteering).getTime()
         );
     } else {
-      const all = await lastValueFrom(
-        this.volunteeringService.getAllVolunteerings()
-      );
+      let all: VolunteeringModule[] = [];
+      try {
+        all = await lastValueFrom(
+          this.volunteeringService.getAllVolunteerings()
+        );
+      } catch (err) {
+        console.error('Failed to load volunteerings', err);
+      }
 
       this.volunteerings = all
         .filter(v => v.volunteerCode === Number(volunteerCode))

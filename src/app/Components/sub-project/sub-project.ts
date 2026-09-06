@@ -33,11 +33,19 @@ export class SubProject {
     this.projectName = this.route.snapshot.paramMap.get('name');
 
     // טען את כל הפרויקטים
-    this.Projects = await lastValueFrom(this.ProjectService.getAllProjects());
-    this.filteredProjects = this.Projects.filter(sp => sp.domainCode?.toString() === this.projectCode);
+    try {
+      this.Projects = await lastValueFrom(this.ProjectService.getAllProjects());
+      this.filteredProjects = this.Projects.filter(sp => sp.domainCode?.toString() === this.projectCode);
+    } catch (err) {
+      console.error('Failed to load projects', err);
+    }
 
     // טען את כל תתי-הפרויקטים
-    this.subProjects = await lastValueFrom(this.subProjectService.getAllProjects());
+    try {
+      this.subProjects = await lastValueFrom(this.subProjectService.getAllProjects());
+    } catch (err) {
+      console.error('Failed to load sub-projects', err);
+    }
     this.filteredSubProjects = [];
     for (let sp of this.filteredProjects) {
       this.filteredSubProjects.push(...this.subProjects.filter(x => x.projectCode === sp.projectCode));

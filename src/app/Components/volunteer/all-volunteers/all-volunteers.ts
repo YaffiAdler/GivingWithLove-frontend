@@ -12,11 +12,12 @@ import { FormBuilder } from '@angular/forms';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { VolunteeringService } from '../../../Services/volunteering-service';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { VolunteerModule } from '../../../Models/volunteer/volunteer-module';
+import { VolunteerModel } from '../../../Models/volunteer/volunteer-module';
 import { VolunteerDetails } from '../volunteer-details/volunteer-details';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { Component, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 @Component({
   selector: 'app-volunteer',
   standalone: true,
@@ -31,8 +32,8 @@ export class AllVolunteers {
   positionService=inject(PositionService)
   listE:EichudModel[]=[];
   // listP:PositionModel[]=[];
-  listV:VolunteerModule[]=[];
-  filteredList:VolunteerModule[] = [];
+  listV:VolunteerModel[]=[];
+  filteredList:VolunteerModel[] = [];
   formBuilder = inject(FormBuilder);
   volunteeringService=inject(VolunteeringService)
  router = inject(Router);
@@ -52,9 +53,14 @@ export class AllVolunteers {
 
 // this.listE = await  lastValueFrom(this.eichudService.getAllEichud());
 // this.listP = await  lastValueFrom(this.positionService.getAllPositions());
-this.listV = await  lastValueFrom(this.volunteerService.getAllVolunteers()) || [];
-    this.filteredList =await [...this.listV];
-    this.searchControl.valueChanges.subscribe(value => {
+try {
+      this.listV = (await lastValueFrom(this.volunteerService.getAllVolunteers())) || [];
+    } catch (err) {
+      console.error('Failed to load volunteers', err);
+      this.listV = [];
+    }
+    this.filteredList = [...this.listV];
+    this.searchControl.valueChanges.pipe(takeUntilDestroyed()).subscribe(value => {
       this.applyFilter(value);
     });
 

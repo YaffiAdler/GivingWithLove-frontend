@@ -19,7 +19,7 @@ import { ProjectService } from '../../../Services/project-service';
 import { ProjectModule } from '../../../Models/project/project-module';
 import { Volunteer } from '../volunteer';
 import { T } from '@angular/cdk/keycodes';
-import { VolunteerModule } from '../../../Models/volunteer/volunteer-module';
+import { VolunteerModel } from '../../../Models/volunteer/volunteer-module';
 import { Component, inject, Input } from '@angular/core';
 
 // domainList
@@ -45,9 +45,9 @@ export class AddVolunteer {
   domainList: number[] = []
   domainList2: VolunteerDomainModule[] = []
   volunteerDomains: VolunteerDomainModule[] = [];
-  volun!:VolunteerModule
+  volun!:VolunteerModel
   isE:boolean=false
-  // p!:VolunteerModule
+  // p!:VolunteerModel
   randomIntFromInterval: (min: number, max: number) => number = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1) + min);
   }

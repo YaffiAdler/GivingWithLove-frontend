@@ -4,13 +4,14 @@ import {EichudModel}from '../Models/EichudModel';
 import { Observable, of, tap } from 'rxjs';
 // import {EichudModel}from 'd:/RivkyPinter/GWL_Project/GivingWithLove-angular/src/app/Models/EichudModel'
 import { UserModel } from '../Models/user/user-model/user-model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EichudService {
   http = inject(HttpClient);
-BASE_URL: string = 'https://localhost:7016/api/Eichud';
+BASE_URL: string = `${environment.apiUrl}/api/Eichud`;
 
 peopleInTheEichud:EichudModel[]=[];
 peopleInTheEichud$!:Observable<EichudModel[]>;

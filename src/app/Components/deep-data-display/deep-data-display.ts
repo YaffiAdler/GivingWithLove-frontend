@@ -6,9 +6,10 @@ import { VolunteeringService } from '../../Services/volunteering-service';
 import { VolunteeringModule } from '../../Models/volunteering/volunteering/volunteering-module';
 import { SubProjectModule } from '../../Models/sub-project/sub-project-module';
 import { lastValueFrom } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SubProjectService } from '../../Services/sub-project-service';
 import { V } from '@angular/cdk/keycodes';
-import { VolunteerModule } from '../../Models/volunteer/volunteer-module';
+import { VolunteerModel } from '../../Models/volunteer/volunteer-module';
 import { VolunteerService } from '../../Services/volunteer-service';
 import { VolunteerDomainService } from '../../Services/volunteer-domain-service';
 import { VolunteerDomainModule } from '../../Models/volunteering/volunteer-domain/volunteer-domain-module';
@@ -33,17 +34,21 @@ export class DeepDataDisplay {
   subProjects: SubProjectModule[] = []
   subProjectService = inject(SubProjectService)
   num: number = 0
-  volounteerArrPerProject: VolunteerModule[] = []
+  volounteerArrPerProject: VolunteerModel[] = []
   volunteerSrv = inject(VolunteerService)
   // volunteerDomainS = inject(VolunteerDomainService)
   // vd: VolunteerDomainModule[] = []
   constructor(private route: ActivatedRoute) { }
   async ngOnInit() {
-    this.subProjects = await lastValueFrom(this.subProjectService.getAllProjects());
+    try {
+      this.subProjects = await lastValueFrom(this.subProjectService.getAllProjects());
+      this.volunteeringArr = await lastValueFrom(this.volunteeringSrv.getAllVolunteerings());
+    } catch (err) {
+      console.error('Failed to load data', err);
+    }
     // this.projectService.refreshData();
-    this.volunteeringArr = await lastValueFrom(this.volunteeringSrv.getAllVolunteerings());
     // this.vd = await lastValueFrom(this.volunteerDomainS.getAllVolunteerDomain());
-    this.route.paramMap.subscribe(params => {
+    this.route.paramMap.pipe(takeUntilDestroyed()).subscribe(params => {
 
       const code = params.get('code');
 

@@ -3,6 +3,7 @@ import { VolunteerDomainModule } from '../Models/volunteer-domain/volunteer-doma
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Directive, inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 @Injectable({
   providedIn: 'root'
 })
@@ -11,7 +12,7 @@ import { Observable } from 'rxjs';
 })
 export class VolunteerDomainService {
 http = inject(HttpClient );
-BASE_URL: string = 'https://localhost:7016/api/VolunteerDomain';
+BASE_URL: string = `${environment.apiUrl}/api/VolunteerDomain`;
 volunteerDomains$: Observable<VolunteerDomainModule[]>;
 volunteerDomains:VolunteerDomainModule[]=[];
   domains:number[]=[];

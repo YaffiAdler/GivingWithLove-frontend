@@ -44,7 +44,11 @@ export class VolunteerDomain {
     domain:this.domain
   });
 
-    this.listProject = await lastValueFrom(this.projectService.getAllProjects());
+    try {
+      this.listProject = await lastValueFrom(this.projectService.getAllProjects());
+    } catch (err) {
+      console.error('Failed to load projects', err);
+    }
     //  this.listP = await  lastValueFrom(this.positionService.getAllPositions());
     //      this.filteredList = [...this.listE];
     //      this.searchControl.valueChanges.subscribe(value => {

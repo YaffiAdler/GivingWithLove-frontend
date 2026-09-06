@@ -2,8 +2,9 @@ import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideZoneChang
 import { provideRouter } from '@angular/router';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { routes } from './app.routes';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
+import { httpLoggingInterceptor } from './core/http.interceptor';
 
 
 export const appConfig: ApplicationConfig = {
@@ -11,7 +12,7 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
-    provideHttpClient(), 
+    provideHttpClient(withInterceptors([httpLoggingInterceptor])),
      provideAnimations(),
   provideCharts(withDefaultRegisterables())
 

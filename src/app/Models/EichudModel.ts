@@ -1,13 +1,4 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-
-@NgModule({
-  declarations: [],
-  imports: [
-    CommonModule
-  ]
-})
-export class EichudModel { 
+export class EichudModel {
 eichudCode!:number;
 tohar:string="";
 familyName:string="";

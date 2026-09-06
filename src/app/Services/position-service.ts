@@ -4,13 +4,14 @@ import { inject, Injectable } from '@angular/core';
 // import { PositionModel } from 'd:/RivkyPinter/GWL_Project/GivingWithLove-angular/src/app/Models/PositionModel';
 import { Observable } from 'rxjs';
 import { PositionModel } from '../Models/PositionModel';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PositionService {
   http = inject(HttpClient);
-BASE_URL: string = 'https://localhost:7016/api/Position/';
+BASE_URL: string = `${environment.apiUrl}/api/Position/`;
 positions:PositionModel[]=[];
 positions$:Observable<PositionModel[]>;
 constructor() { 

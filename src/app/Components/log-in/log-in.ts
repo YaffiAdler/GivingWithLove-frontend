@@ -6,7 +6,7 @@ import { PositionService } from '../../Services/position-service';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { EichudService } from '../../Services/eichud-service';
-import { VolunteerModule } from '../../Models/volunteer/volunteer-module';
+import { VolunteerModel } from '../../Models/volunteer/volunteer-module';
 import { EichudModel } from '../../Models/EichudModel';
 import { VolunteeringService } from '../../Services/volunteering-service';
 import { forkJoin, lastValueFrom } from 'rxjs';
@@ -24,8 +24,8 @@ export class LogIn {
   error: boolean = true
   volunteerSrv: VolunteerService = inject(VolunteerService)
   volunteeringSrv: VolunteeringService = inject(VolunteeringService)
-  volunteerArr:VolunteerModule[]=[]
-  user?:VolunteerModule;
+  volunteerArr:VolunteerModel[]=[]
+  user?:VolunteerModel;
   positoinSrv: PositionService = inject(PositionService)
   eichudSrv: EichudService = inject(EichudService)
   eichudArr:EichudModel[]=[]
@@ -36,14 +36,18 @@ export class LogIn {
   position: new FormControl("זמני", [Validators.required])
   })
 async ngOnInit() {
-  // טען את כל המתנדבים
-  this.volunteerSrv.volunteers = await lastValueFrom(this.volunteerSrv.getAllVolunteers());
+  try {
+    // טען את כל המתנדבים
+    this.volunteerSrv.volunteers = await lastValueFrom(this.volunteerSrv.getAllVolunteers());
 
-  // טען את כל אנשי האיחוד
-  this.eichudSrv.peopleInTheEichud = await lastValueFrom(this.eichudSrv.getAllEichud());
+    // טען את כל אנשי האיחוד
+    this.eichudSrv.peopleInTheEichud = await lastValueFrom(this.eichudSrv.getAllEichud());
 
-  // טען את כל התפקידים
-  this.positoinSrv.positions = await lastValueFrom(this.positoinSrv.getAllPositions());
+    // טען את כל התפקידים
+    this.positoinSrv.positions = await lastValueFrom(this.positoinSrv.getAllPositions());
+  } catch (err) {
+    console.error('Failed to load login data', err);
+  }
 }
   
   enter() {

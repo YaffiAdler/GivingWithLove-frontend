@@ -1,5 +1,5 @@
 // import { inject, Injectable } from '@angular/core';
-import { VolunteerModule } from '../Models/volunteer/volunteer-module';
+import { VolunteerModel } from '../Models/volunteer/volunteer-module';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
@@ -7,25 +7,26 @@ import { VolunteerDomainModule } from '../Models/volunteering/volunteer-domain/v
 
 import { EichudModel } from '../Models/EichudModel';
 import { inject, Injectable } from '@angular/core';
+import { environment } from '../../environments/environment';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class VolunteerService {
-  BASE_URL: string ='https://localhost:7016/api/Volunteer';
+  BASE_URL: string = `${environment.apiUrl}/api/Volunteer`;
   http = inject(HttpClient);
-  currentUser?:VolunteerModule
+  currentUser?:VolunteerModel
   isVolunteerLoggedIn:boolean = false
-  volunteers$!: Observable<VolunteerModule[]>;
-  volunteers:VolunteerModule[]=[];
+  volunteers$!: Observable<VolunteerModel[]>;
+  volunteers:VolunteerModel[]=[];
 
     volunteerCodeInS?:number 
-    volunteerInS?:VolunteerModule
+    volunteerInS?:VolunteerModel
   setSelectedVolunteer(volunteerCode: number) {
     this.volunteerCodeInS = volunteerCode;
   }
-   setSelectedVolunteer2(volunteer: VolunteerModule) {
+   setSelectedVolunteer2(volunteer: VolunteerModel) {
     this.volunteerInS = volunteer;
   }
   // volunterrDomain:
@@ -33,22 +34,22 @@ export class VolunteerService {
   userPosition?:string;//מה התפקיד של המשתמש הנוכחי
 
 
-  getAllVolunteers(): Observable<VolunteerModule[]> {
-    return this.http.get<VolunteerModule[]>(this.BASE_URL);
+  getAllVolunteers(): Observable<VolunteerModel[]> {
+    return this.http.get<VolunteerModel[]>(this.BASE_URL);
   }
 
-getVolunteerById(id: number): Observable<VolunteerModule> {
-    return this.http.get<VolunteerModule>(this.BASE_URL + '/' + id);
+getVolunteerById(id: number): Observable<VolunteerModel> {
+    return this.http.get<VolunteerModel>(this.BASE_URL + '/' + id);
 }
 
 
   // getProjectById(id:number): Observable<ProjectModule[]> {
   //   return this.http.get<ProjectModule[]>(this.BASE_URL +'Get/'+id);
   // }
-  addVolunteer(item: VolunteerModule) {
+  addVolunteer(item: VolunteerModel) {
     return this.http.post(this.BASE_URL, item).subscribe((res) => this.refreshData());
   }
-  updateVolunteer(item: VolunteerModule){
+  updateVolunteer(item: VolunteerModel){
     return this.http.put<number>(this.BASE_URL+'/'+item.volunteerCode, item).subscribe(() => this.refreshData());
   }
   deleteVolunteer(id: number): Observable<number> {

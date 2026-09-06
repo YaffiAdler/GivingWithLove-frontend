@@ -41,14 +41,12 @@ export class DataDisplay {
 
   // ===== load =====
   async ngOnInit() {
-    this.data =
-      await lastValueFrom(this.volunteeringService.getAllVolunteerings());
-
-    this.rebuildAll();
-    
   this.projectCode = this.route.snapshot.paramMap.get('id');
   try {
-    
+    this.data = await lastValueFrom(this.volunteeringService.getAllVolunteerings());
+
+    this.rebuildAll();
+
     this.Projects = await lastValueFrom(this.ProjectService.getAllProjects());
     this.subProjects = await lastValueFrom(this.subProjectService.getAllProjects());
     this.volunteeringArr = await lastValueFrom(this.volunteeringSrv.getAllVolunteerings());

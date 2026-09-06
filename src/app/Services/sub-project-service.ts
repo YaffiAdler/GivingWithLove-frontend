@@ -2,13 +2,14 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 import { SubProjectModule } from '../Models/sub-project/sub-project-module';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SubProjectService {
    http = inject(HttpClient );
-BASE_URL: string = 'https://localhost:7016/api/SubProject';
+BASE_URL: string = `${environment.apiUrl}/api/SubProject`;
 Projects$: Observable<SubProjectModule[]>= this.getAllProjects();
 Projects:SubProjectModule[]=[];
   constructor() { 

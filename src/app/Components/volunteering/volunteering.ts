@@ -3,7 +3,7 @@
 
 // import { AsyncPipe, CommonModule, DatePipe } from '@angular/common';
 // import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-// import { VolunteerModule } from '../../Models/volunteer/volunteer-module';
+// import { VolunteerModel } from '../../Models/volunteer/volunteer-module';
 // import { VolunteerService } from '../../Services/volunteer-service';
 // import { EichudService } from '../../Services/eichud-service';
 // import { DataView } from 'primeng/dataview';
@@ -32,7 +32,7 @@
 //   filteredSubProjects: SubProjectModule[] = []; // מאגר ה-subProjects המותאם לפי projectCode
 //   // poorManService = inject(EichudService)
 //   volunteeringArr: VolunteeringModule[] = [];
-//   volunteerArr: VolunteerModule[] = []//מערך מתנדבים
+//   volunteerArr: VolunteerModel[] = []//מערך מתנדבים
 //   volunteeringService = inject(VolunteeringService)
 //   volunteerService = inject(VolunteerService)
 //   ecdService = inject(EichudService)
@@ -126,7 +126,7 @@
 // // <<<<<<< HEAD
 // // import { AsyncPipe, CommonModule } from '@angular/common';
 // // import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-// // import { VolunteerModule } from '../../Models/volunteer/volunteer-module';
+// // import { VolunteerModel } from '../../Models/volunteer/volunteer-module';
 // // import { VolunteerService } from '../../Services/volunteer-service';
 // // import { ProjectService } from '../../Services/project-service';
 // // import { ProjectModule } from '../../Models/project/project-module';
@@ -138,7 +138,7 @@
 // // =======
 // // import { AsyncPipe, CommonModule, DatePipe } from '@angular/common';
 // // import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-// // import { VolunteerModule } from '../../Models/volunteer/volunteer-module';
+// // import { VolunteerModel } from '../../Models/volunteer/volunteer-module';
 
 // // import { EichudService } from '../../Services/eichud-service';
 // // import { DataView } from 'primeng/dataview';
@@ -159,7 +159,7 @@
 // //   filteredSubProjects: SubProjectModule[] = []; // מאגר ה-subProjects המותאם לפי projectCode
 // //   // poorManService = inject(EichudService)
 // //   volunteeringArr: VolunteeringModule[] = [];
-// //   volunteerArr: VolunteerModule[] = []//מערך מתנדבים
+// //   volunteerArr: VolunteerModel[] = []//מערך מתנדבים
 // //   volunteeringService = inject(VolunteeringService)
 // //   volunteerService = inject(VolunteerService)
 // //   ecdService = inject(EichudService)
@@ -281,7 +281,7 @@ import { EichudModel } from '../../Models/EichudModel';
 
 import { AsyncPipe, CommonModule, DatePipe } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { VolunteerModule } from '../../Models/volunteer/volunteer-module';
+import { VolunteerModel } from '../../Models/volunteer/volunteer-module';
 import { VolunteerService } from '../../Services/volunteer-service';
 import { EichudService } from '../../Services/eichud-service';
 import { DataView } from 'primeng/dataview';
@@ -310,7 +310,7 @@ export class Volunteering {
   filteredSubProjects: SubProjectModule[] = []; // מאגר ה-subProjects המותאם לפי projectCode
   // poorManService = inject(EichudService)
   volunteeringArr: VolunteeringModule[] = [];
-  volunteerArr: VolunteerModule[] = []//מערך מתנדבים
+  volunteerArr: VolunteerModel[] = []//מערך מתנדבים
   volunteeringService = inject(VolunteeringService)
   volunteerService = inject(VolunteerService)
   ecdService = inject(EichudService)

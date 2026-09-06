@@ -39,8 +39,12 @@ export class MidData {
   constructor(private route: ActivatedRoute) { }
 
   async ngOnInit() {
-    this.subProjects = await lastValueFrom(this.subProjectService.getAllProjects());
-    this.volunteeringArr = await lastValueFrom(this.volunteeringSrv.getAllVolunteerings());
+    try {
+      this.subProjects = await lastValueFrom(this.subProjectService.getAllProjects());
+      this.volunteeringArr = await lastValueFrom(this.volunteeringSrv.getAllVolunteerings());
+    } catch (err) {
+      console.error('Failed to load data', err);
+    }
 
     const code = this.route.snapshot.paramMap.get('code');
 

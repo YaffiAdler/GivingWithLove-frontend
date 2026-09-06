@@ -5,15 +5,15 @@ import { ProjectModule } from '../Models/project/project-module';
 import { Volunteer } from '../Components/volunteer/volunteer';
 import { VolunteerDomainModule } from '../Models/volunteer-domain/volunteer-domain-module';
 import { VolunteerService } from './volunteer-service';
-import { VolunteerModule } from '../Models/volunteer/volunteer-module';
 import { VolunteeringModule } from '../Models/volunteering/volunteering/volunteering-module';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProjectService {
   http = inject(HttpClient);
-  BASE_URL: string = 'https://localhost:7016/api/Project';
+  BASE_URL: string = `${environment.apiUrl}/api/Project`;
   Projects$!: Observable<ProjectModule[]>;
   projects: ProjectModule[] = [];
   VolunteerDomain: VolunteerDomainModule[] = [];
