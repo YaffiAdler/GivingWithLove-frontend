@@ -40,10 +40,6 @@ projectsArr: ProjectModule[] = [];
       this.projectService.addProject(project);
     }
   }
-  deleteProject(p: ProjectModule) {
-    this.projectService.deleteProject(p.projectName);
-
-  }
   updateProject(p: ProjectModule) {
     this.projectService.updateProject(p);
   }

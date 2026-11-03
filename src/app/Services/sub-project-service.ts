@@ -2,14 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 import { SubProjectModule } from '../Models/sub-project/sub-project-module';
-import { environment } from '../../environments/environment';
+import { apiUrl } from '../core/api-url';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SubProjectService {
    http = inject(HttpClient );
-BASE_URL: string = `${environment.apiUrl}/api/SubProject`;
 Projects$: Observable<SubProjectModule[]>= this.getAllProjects();
 Projects:SubProjectModule[]=[];
   constructor() { 
@@ -19,31 +18,25 @@ Projects:SubProjectModule[]=[];
   }
 // --- מתודות CRUD ---
   getAllProjects(): Observable<SubProjectModule[]> {
-    return this.http.get<SubProjectModule[]>(this.BASE_URL);
+    return this.http.get<SubProjectModule[]>(apiUrl('SubProject'));
   }
   getProjectById(id:number): Observable<SubProjectModule[]> {
-    return this.http.get<SubProjectModule[]>(this.BASE_URL +id);
+    return this.http.get<SubProjectModule[]>(apiUrl('SubProject', id));
   }
-  // addProject(item: SubProjectModule) {
-  //   return this.http.post(this.BASE_URL, item).subscribe(() => this.refreshData());
-  // }
-  // updateProject(item: SubProjectModule){
-  //   return this.http.put<number>(this.BASE_URL+'Put/'+item.projectCode, item).subscribe(() => this.refreshData());
-  // }
   addProject(item: SubProjectModule) {
-  this.http.post(this.BASE_URL, item).pipe(
+  this.http.post(apiUrl('SubProject'), item).pipe(
     tap(() => this.refreshData()) // מעדכן את הנתונים אחרי הוספה
   ).subscribe();
 }
 
 updateProject(item: SubProjectModule) {
-  this.http.put<number>(this.BASE_URL + 'Put/' + item.projectCode, item).pipe(
+  this.http.put<number>(apiUrl('SubProject', item.subProjectCode), item).pipe(
     tap(() => this.refreshData()) // מעדכן את הנתונים אחרי עדכון
   ).subscribe();
 }
  
-  deleteProject(name: string): Observable<number> {
-        return this.http.delete<number>(this.BASE_URL+'Delete/'+name);
+  deleteProject(id: number): Observable<number> {
+        return this.http.delete<number>(apiUrl('SubProject', id));
   }
 
   existingProject(g: SubProjectModule) {

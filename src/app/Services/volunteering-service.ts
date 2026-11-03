@@ -4,7 +4,7 @@ import { VolunteeringModule } from '../Models/volunteering/volunteering/voluntee
 import { Observable } from 'rxjs';
 import { SubProjectService } from './sub-project-service';
 import { SubProjectModule } from '../Models/sub-project/sub-project-module';
-import { environment } from '../../environments/environment';
+import { apiUrl } from '../core/api-url';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +13,6 @@ import { environment } from '../../environments/environment';
 export class VolunteeringService {
   http = inject(HttpClient );
 
-BASE_URL: string = `${environment.apiUrl}/api/Volunteering`;
 volunteerings$!: Observable<VolunteeringModule[]>;
 subProjectsrv=inject(SubProjectService)
 volunteerings:VolunteeringModule[]=[];
@@ -49,20 +48,20 @@ dateOfVolunteeringInS!:Date
 
 
   getAllVolunteerings(): Observable<VolunteeringModule[]> {
-    return this.http.get<VolunteeringModule[]>(this.BASE_URL);
+    return this.http.get<VolunteeringModule[]>(apiUrl('Volunteering'));
   }
   getVolunteeringById(id:number): Observable<VolunteeringModule[]> {
-    return this.http.get<VolunteeringModule[]>(this.BASE_URL+'/'+id);
+    return this.http.get<VolunteeringModule[]>(apiUrl('Volunteering', id));
   }
   addVolunteering(item: VolunteeringModule) {
-    return this.http.post(this.BASE_URL, item).subscribe(() => this.refreshData());
+    return this.http.post(apiUrl('Volunteering'), item).subscribe(() => this.refreshData());
   }
   updateVolunteering(item: VolunteeringModule){
-    return this.http.put<number>(this.BASE_URL+item.volunteeringCode, item).subscribe(() => this.refreshData());
+    return this.http.put<number>(apiUrl('Volunteering', item.volunteeringCode), item).subscribe(() => this.refreshData());
   }
  
   deleteVolunteering(id: number): Observable<number> {
-    return this.http.delete<number>(this.BASE_URL+'/'+id);
+    return this.http.delete<number>(apiUrl('Volunteering', id));
   }
 
   existingVolunteering(g: VolunteeringModule) {

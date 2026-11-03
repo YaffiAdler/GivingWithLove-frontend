@@ -6,14 +6,13 @@ import { Volunteer } from '../Components/volunteer/volunteer';
 import { VolunteerDomainModule } from '../Models/volunteer-domain/volunteer-domain-module';
 import { VolunteerService } from './volunteer-service';
 import { VolunteeringModule } from '../Models/volunteering/volunteering/volunteering-module';
-import { environment } from '../../environments/environment';
+import { apiUrl } from '../core/api-url';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProjectService {
   http = inject(HttpClient);
-  BASE_URL: string = `${environment.apiUrl}/api/Project`;
   Projects$!: Observable<ProjectModule[]>;
   projects: ProjectModule[] = [];
   VolunteerDomain: VolunteerDomainModule[] = [];
@@ -30,20 +29,20 @@ export class ProjectService {
   getAllProjects(): Observable<ProjectModule[]> {
         this.dataPerProject()
 
-    return this.http.get<ProjectModule[]>(this.BASE_URL);
+    return this.http.get<ProjectModule[]>(apiUrl('Project'));
   }
   getProjectById(id: number): Observable<ProjectModule> {
-    return this.http.get<ProjectModule>(this.BASE_URL + '/' + id);
+    return this.http.get<ProjectModule>(apiUrl('Project', id));
   }
   addProject(item: ProjectModule) {
-    return this.http.post(this.BASE_URL, item).subscribe(() => this.refreshData());
+    return this.http.post(apiUrl('Project'), item).subscribe(() => this.refreshData());
   }
   updateProject(item: ProjectModule) {
-    return this.http.put<number>(this.BASE_URL + 'Put/' + item.projectCode, item).subscribe(() => this.refreshData());
+    return this.http.put<number>(apiUrl('Project', item.projectCode), item).subscribe(() => this.refreshData());
   }
 
-  deleteProject(name: string): Observable<number> {
-    return this.http.delete<number>(this.BASE_URL + 'Delete/' + name);
+  deleteProject(id: number): Observable<number> {
+    return this.http.delete<number>(apiUrl('Project', id));
   }
 
   existingProject(g: ProjectModule) {
