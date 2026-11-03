@@ -13,7 +13,7 @@ The backend is a separate ASP.NET API (default `https://localhost:7016`) — it 
 - The `.mdf`/`.ldf` files must not be in git (they are in `.gitignore`); each developer needs a local copy of `GWLData.mdf`.
 - `bin/` and `obj/` are in `.gitignore` but were committed earlier and are still tracked, so every build dirties the working tree.
 - All BL/DAL services are registered as **singletons** (`Bl/BlManager.cs`), including the one holding the `DbContext`. EF Core `DbContext` is not thread-safe, so concurrent requests can fail and cached entities go stale.
-- CORS allows only `http://localhost:4200`; any other dev port or the production origin will be blocked.
+- CORS (`Web/Program.cs`) allows any `localhost` origin, because `ng serve` picks a random port when 4200 is taken. The production origin is not allowed yet and must be added on deployment.
 - No authentication on the API (it matches the frontend's in-memory login).
 
 ### Production config
