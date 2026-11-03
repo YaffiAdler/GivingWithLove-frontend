@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, DestroyRef, inject } from '@angular/core';
 import { ActivatedRoute, RouterLink, RouterModule, RouterOutlet } from '@angular/router';
 import { ProjectService } from '../../Services/project-service';
 import { ProjectModule } from '../../Models/project/project-module';
@@ -23,6 +23,7 @@ import { VolunteerDomainModule } from '../../Models/volunteering/volunteer-domai
 export class DeepDataDisplay {
 
   projectService = inject(ProjectService);
+  private destroyRef = inject(DestroyRef);
 
   project!: ProjectModule ;
   code1!: string;
@@ -48,7 +49,7 @@ export class DeepDataDisplay {
     }
     // this.projectService.refreshData();
     // this.vd = await lastValueFrom(this.volunteerDomainS.getAllVolunteerDomain());
-    this.route.paramMap.pipe(takeUntilDestroyed()).subscribe(params => {
+    this.route.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(params => {
 
       const code = params.get('code');
 

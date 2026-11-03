@@ -1,131 +1,48 @@
-// import { Routes } from '@angular/router';
-// import { Volunteering } from './Components/volunteering/volunteering';
-// import { Volunteer } from './Components/volunteer/volunteer';
-// import { Project } from './Components/project/project';
-// import { Eicud } from './Components/eicud/eicud';
-// import { Position } from './Components/position/position';
-
-// import { AllVolunteers } from './Components/volunteer/all-volunteers/all-volunteers';
-// import { AddVolunteer } from './Components/volunteer/add-volunteer/add-volunteer';
-// import { VolunteerDetails } from './Components/volunteer/volunteer-details/volunteer-details';
-// import { HomePage } from './Components/home-page/home-page';
-
-
-// import { LogIn } from './Components/log-in/log-in';
-// import { VolunteerDomain } from './Components/volunteer-domain/volunteer-domain';
-// import { Domains } from './Components/domains/domains';
-// import { SubProject } from './Components/sub-project/sub-project';
-// import { DataDisplay } from './Components/data-display/data-display';
-// import { MidData } from './Components/mid-data/mid-data';
-// import { DeepDataDisplay } from './Components/deep-data-display/deep-data-display';
-
-
-// export const routes: Routes = [ 
-//     { path: '', redirectTo: 'home', pathMatch: 'full' },
-
-//     { path:'home', component:HomePage},
-//     { path: 'v', component: Volunteering},
-
-//     { path: 'volunteer', component: Volunteer, children:[
-//         {path: '', redirectTo: 'allvolunteers', pathMatch: 'full' },
-//         {path:'allvolunteers',component:AllVolunteers,children:[
-//             {path:'volunteer-details',component:VolunteerDetails}
-//         ]},
-//         {path:'addvolunteer',component:AddVolunteer }
-
-//     ]},
-//     { path: 'project', component: Project},
-//     { path:'eichud', component:Eicud},
-//     { path:'position', component:Position},
-//     { path:'', component:HomePage},
-
-
-
-//      { path:'data', component:DataDisplay},
-//      { path:'midData/:code', component:MidData},
-//      { path:'deepDataDisplay/:code', component:DeepDataDisplay},
-
-//     { path:'login', component:LogIn},
-//     { path:'domain', component:Domains,
-//     children:[
-//        {path: 'project', component: Project} ,
-//       { path: 'sub/:id/:name', component: SubProject },
-
-//     ]
-// }
-
-// ];
 import { Routes } from '@angular/router';
-import { Volunteering } from './Components/volunteering/volunteering';
-import { Volunteer } from './Components/volunteer/volunteer';
-import { Project } from './Components/project/project';
-import { Eicud } from './Components/eicud/eicud';
-import { Position } from './Components/position/position';
-
-import { AllVolunteers } from './Components/volunteer/all-volunteers/all-volunteers';
-import { AddVolunteer } from './Components/volunteer/add-volunteer/add-volunteer';
-import { VolunteerDetails } from './Components/volunteer/volunteer-details/volunteer-details';
-import { HomePage } from './Components/home-page/home-page';
-
-
-import { LogIn } from './Components/log-in/log-in';
-import { VolunteerDomain } from './Components/volunteer-domain/volunteer-domain';
-import { Domains } from './Components/domains/domains';
-import { SubProject } from './Components/sub-project/sub-project';
-import { DataDisplay } from './Components/data-display/data-display';
-import { MidData } from './Components/mid-data/mid-data';
-import { DeepDataDisplay } from './Components/deep-data-display/deep-data-display';
-
 
 export const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
-    { path: 'home', component: HomePage },
-    { path: 'v', component: Volunteering },
+    { path: 'home', loadComponent: () => import('./Components/home-page/home-page').then(m => m.HomePage) },
+    { path: 'v', loadComponent: () => import('./Components/volunteering/volunteering').then(m => m.Volunteering) },
 
     {
-        path: 'volunteer', component: Volunteer, children: [
+        path: 'volunteer', loadComponent: () => import('./Components/volunteer/volunteer').then(m => m.Volunteer), children: [
             { path: '', redirectTo: 'allvolunteers', pathMatch: 'full' },
             {
-                path: 'allvolunteers', component: AllVolunteers, children: [
-                    { path: 'volunteer-details', component: VolunteerDetails }
+                path: 'allvolunteers', loadComponent: () => import('./Components/volunteer/all-volunteers/all-volunteers').then(m => m.AllVolunteers), children: [
+                    { path: 'volunteer-details', loadComponent: () => import('./Components/volunteer/volunteer-details/volunteer-details').then(m => m.VolunteerDetails) }
                 ]
             },
             {
                 path: 'addvolunteer/add',
-                component: AddVolunteer
+                loadComponent: () => import('./Components/volunteer/add-volunteer/add-volunteer').then(m => m.AddVolunteer)
             },
             {
                 path: 'addvolunteer/edit/:id',
-                component: AddVolunteer
+                loadComponent: () => import('./Components/volunteer/add-volunteer/add-volunteer').then(m => m.AddVolunteer)
             }
 
         ]
     },
-    { path: 'project', component: Project },
-    { path: 'eichud', component: Eicud },
-    { path: 'position', component: Position },
-    { path: '', component: HomePage },
-         { path:'midData/:code', component:MidData},
-     { path:'deepDataDisplay/:code', component:DeepDataDisplay},
+    { path: 'project', loadComponent: () => import('./Components/project/project').then(m => m.Project) },
+    { path: 'eichud', loadComponent: () => import('./Components/eicud/eicud').then(m => m.Eicud) },
+    { path: 'position', loadComponent: () => import('./Components/position/position').then(m => m.Position) },
+    { path: '', loadComponent: () => import('./Components/home-page/home-page').then(m => m.HomePage) },
+    { path: 'midData/:code', loadComponent: () => import('./Components/mid-data/mid-data').then(m => m.MidData) },
+    { path: 'deepDataDisplay/:code', loadComponent: () => import('./Components/deep-data-display/deep-data-display').then(m => m.DeepDataDisplay) },
 
 
 
-    { path: 'data', component: DataDisplay },
+    { path: 'data', loadComponent: () => import('./Components/data-display/data-display').then(m => m.DataDisplay) },
 
 
-    { path: 'login', component: LogIn },
+    { path: 'login', loadComponent: () => import('./Components/log-in/log-in').then(m => m.LogIn) },
     {
-        path: 'domain', component: Domains,
+        path: 'domain', loadComponent: () => import('./Components/domains/domains').then(m => m.Domains),
         children: [
-            { path: 'project', component: Project },
-            { path: 'sub/:id/:name', component: SubProject },
+            { path: 'project', loadComponent: () => import('./Components/project/project').then(m => m.Project) },
+            { path: 'sub/:id/:name', loadComponent: () => import('./Components/sub-project/sub-project').then(m => m.SubProject) },
         ]
     }
 
 ];
-
-
-
-
-
-

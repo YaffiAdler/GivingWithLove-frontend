@@ -16,7 +16,7 @@ import { VolunteerModel } from '../../../Models/volunteer/volunteer-module';
 import { VolunteerDetails } from '../volunteer-details/volunteer-details';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
-import { Component, inject } from '@angular/core';
+import { Component, DestroyRef, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 @Component({
   selector: 'app-volunteer',
@@ -27,6 +27,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 })
 export class AllVolunteers {
   dialog = inject(MatDialog);
+  private destroyRef = inject(DestroyRef);
   volunteerService=inject(VolunteerService)
   eichudService=inject(EichudService)
   positionService=inject(PositionService)
@@ -60,7 +61,7 @@ try {
       this.listV = [];
     }
     this.filteredList = [...this.listV];
-    this.searchControl.valueChanges.pipe(takeUntilDestroyed()).subscribe(value => {
+    this.searchControl.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(value => {
       this.applyFilter(value);
     });
 
