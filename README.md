@@ -1,59 +1,53 @@
-# BlankApp
+# GivingWithLove — Frontend
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.2.1.
+Angular web app for managing a charity organization: a responsive dashboard with volunteer management, projects and sub-projects, positions, and data visualizations.
+Consumes the REST API in [GivingWithLove-backend](https://github.com/YaffiAdler/GivingWithLove-backend).
 
-## Development server
+## Features
+- Volunteer management — list, add, edit and view details
+- Projects and sub-projects, volunteer domains, positions and volunteering records
+- Dashboard with drill-down data views and charts
+- Login screen and client-side routing with nested routes
+- Responsive UI
 
-To start a local development server, run:
+## Tech stack
+- Angular 20 (standalone components, Angular Router, HttpClient)
+- TypeScript, SCSS
+- Angular Material, PrimeNG, Bootstrap 5
+- Chart.js with ng2-charts
+- RxJS
 
-```bash
-ng serve
+## Project structure
+```
+src/app
+├── Components   – screens: home, login, volunteer (list/add/details), project, sub-project, domains, position, data views
+├── Models       – TypeScript models matching the API
+├── Services     – HTTP services, one per API resource
+├── app.routes.ts
+└── app.config.ts
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Getting started
+**Requirements:** Node.js (LTS) and npm; the backend running locally.
 
 ```bash
-ng generate component component-name
+git clone https://github.com/YaffiAdler/GivingWithLove-frontend.git
+cd GivingWithLove-frontend
+npm install
+npm start
 ```
+Open `http://localhost:4200`.
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+The API base URL is currently `https://localhost:7016/api/...` and is set inside the files in `src/app/Services`.
 
-```bash
-ng generate --help
-```
+## Scripts
+| Command | Description |
+|---|---|
+| `npm start` | Dev server |
+| `npm run build` | Production build |
+| `npm test` | Unit tests (Karma + Jasmine) |
 
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## Roadmap
+- Move the API URL to Angular environment files
+- Route guards for authenticated pages
+- Screenshots / demo deployment
