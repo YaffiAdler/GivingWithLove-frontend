@@ -7,14 +7,13 @@ import { VolunteerDomainModule } from '../Models/volunteering/volunteer-domain/v
 
 import { EichudModel } from '../Models/EichudModel';
 import { inject, Injectable } from '@angular/core';
-import { environment } from '../../environments/environment';
+import { apiUrl } from '../core/api-url';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class VolunteerService {
-  BASE_URL: string = `${environment.apiUrl}/api/Volunteer`;
   http = inject(HttpClient);
   currentUser?:VolunteerModel
   isVolunteerLoggedIn:boolean = false
@@ -35,25 +34,22 @@ export class VolunteerService {
 
 
   getAllVolunteers(): Observable<VolunteerModel[]> {
-    return this.http.get<VolunteerModel[]>(this.BASE_URL);
+    return this.http.get<VolunteerModel[]>(apiUrl('Volunteer'));
   }
 
 getVolunteerById(id: number): Observable<VolunteerModel> {
-    return this.http.get<VolunteerModel>(this.BASE_URL + '/' + id);
+    return this.http.get<VolunteerModel>(apiUrl('Volunteer', id));
 }
 
 
-  // getProjectById(id:number): Observable<ProjectModule[]> {
-  //   return this.http.get<ProjectModule[]>(this.BASE_URL +'Get/'+id);
-  // }
   addVolunteer(item: VolunteerModel) {
-    return this.http.post(this.BASE_URL, item).subscribe((res) => this.refreshData());
+    return this.http.post(apiUrl('Volunteer'), item).subscribe((res) => this.refreshData());
   }
   updateVolunteer(item: VolunteerModel){
-    return this.http.put<number>(this.BASE_URL+'/'+item.volunteerCode, item).subscribe(() => this.refreshData());
+    return this.http.put<number>(apiUrl('Volunteer', item.volunteerCode), item).subscribe(() => this.refreshData());
   }
   deleteVolunteer(id: number): Observable<number> {
-    return this.http.delete<number>(this.BASE_URL+id);
+    return this.http.delete<number>(apiUrl('Volunteer', id));
   }   
   refreshData(){
     this.getAllVolunteers().subscribe(x => this.volunteers = x);

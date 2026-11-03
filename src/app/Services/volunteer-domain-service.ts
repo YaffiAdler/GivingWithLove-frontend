@@ -3,7 +3,7 @@ import { VolunteerDomainModule } from '../Models/volunteer-domain/volunteer-doma
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Directive, inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { environment } from '../../environments/environment';
+import { apiUrl } from '../core/api-url';
 @Injectable({
   providedIn: 'root'
 })
@@ -12,7 +12,6 @@ import { environment } from '../../environments/environment';
 })
 export class VolunteerDomainService {
 http = inject(HttpClient );
-BASE_URL: string = `${environment.apiUrl}/api/VolunteerDomain`;
 volunteerDomains$: Observable<VolunteerDomainModule[]>;
 volunteerDomains:VolunteerDomainModule[]=[];
   domains:number[]=[];
@@ -25,23 +24,20 @@ volunteerDomains:VolunteerDomainModule[]=[];
 }
 // --- מתודות CRUD ---
 addVolunteerDomain(item: VolunteerDomainModule) {
-  return this.http.post(this.BASE_URL, item);
+  return this.http.post(apiUrl('VolunteerDomain'), item);
 }
   getAllVolunteerDomain(): Observable<VolunteerDomainModule[]> {
-    return this.http.get<VolunteerDomainModule[]>(this.BASE_URL);
+    return this.http.get<VolunteerDomainModule[]>(apiUrl('VolunteerDomain'));
   }
   getVolunteerDomainById(id:number): Observable<VolunteerDomainModule[]> {
-    return this.http.get<VolunteerDomainModule[]>(this.BASE_URL+id);
+    return this.http.get<VolunteerDomainModule[]>(apiUrl('VolunteerDomain', id));
   }
-  // addVolunteerDomain(item: VolunteerDomainModule) {
-  //   return this.http.post(this.BASE_URL, item).subscribe(() => this.refreshData());
-  // }
   updateVolunteerDomain(item: VolunteerDomainModule){
-    return this.http.put<number>(this.BASE_URL+item.volunteerDomainsCode, item).subscribe(() => this.refreshData());
+    return this.http.put<number>(apiUrl('VolunteerDomain', item.volunteerDomainsCode), item).subscribe(() => this.refreshData());
   }
  
   deleteVolunteerDomain(id: number): Observable<number> {
-    return this.http.delete<number>(this.BASE_URL+id);
+    return this.http.delete<number>(apiUrl('VolunteerDomain', id));
   }
 
   existingVolunteerDomain(g: VolunteerDomainModule) {

@@ -1,10 +1,12 @@
+@docs/agent-rules.md
+
 # CLAUDE.md
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Overview
 
-Hebrew/RTL volunteer-management SPA for the "Giving With Love" organization: volunteers, eichud (unification) personnel, project domains → projects → sub-projects, positions, volunteering records, and an analytics dashboard. Angular 20 standalone components, Angular Material + PrimeNG + Bootstrap. Charts use **two** wrappers over the same Chart.js 3.9.1: ng2-charts (`<canvas baseChart>`, registered via `provideCharts(withDefaultRegisterables())` in `app.config.ts`) in `data-display`, and PrimeNG `<p-chart>` (`ChartModule` from `primeng/chart`, which imports `chart.js/auto`) in `volunteer-details`. The `baseChart` canvases left in `volunteer-details.html` are commented out — that component does not import `BaseChartDirective`.
+Hebrew/RTL volunteer-management SPA for the "Giving With Love" organization: volunteers, eichud (unification) personnel, project domains → projects → sub-projects, positions, volunteering records, and an analytics dashboard. Angular 20 standalone components, Angular Material + PrimeNG + Bootstrap. Charts use **two** wrappers over the same Chart.js 3.9.1: ng2-charts (`<canvas baseChart>`, registered via `provideCharts(withDefaultRegisterables())` in `app.config.ts`) in `data-display`, and PrimeNG `<p-chart>` (`ChartModule` from `primeng/chart`, which imports `chart.js/auto`) in `volunteer-details`. The `baseChart` canvases left in `volunteer-details.html` are commented out — that component does not import `BaseChartDirective`. Peer dependencies: ng2-charts 9.0.0 requires `chart.js` `^3.4.0 || ^4.0.0`, while PrimeNG 20.4.0 declares no `chart.js` peer dependency at all (its `ChartModule` just imports whatever `chart.js` is installed).
 
 The backend is a separate ASP.NET API (default `https://localhost:7016`) — it must be running for the app to show any data.
 

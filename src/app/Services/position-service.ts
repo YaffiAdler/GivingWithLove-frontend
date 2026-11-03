@@ -4,14 +4,13 @@ import { inject, Injectable } from '@angular/core';
 // import { PositionModel } from 'd:/RivkyPinter/GWL_Project/GivingWithLove-angular/src/app/Models/PositionModel';
 import { Observable } from 'rxjs';
 import { PositionModel } from '../Models/PositionModel';
-import { environment } from '../../environments/environment';
+import { apiUrl } from '../core/api-url';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PositionService {
   http = inject(HttpClient);
-BASE_URL: string = `${environment.apiUrl}/api/Position/`;
 positions:PositionModel[]=[];
 positions$:Observable<PositionModel[]>;
 constructor() { 
@@ -19,20 +18,20 @@ constructor() {
     this.positions$.subscribe(x => this.positions = x);
   }
   getAllPositions(): Observable<PositionModel[]> {
-    return this.http.get<PositionModel[]>(this.BASE_URL);
+    return this.http.get<PositionModel[]>(apiUrl('Position'));
   }
   getPositionById(id:number): Observable<PositionModel[]> {
-    return this.http.get<PositionModel[]>(this.BASE_URL+id);
+    return this.http.get<PositionModel[]>(apiUrl('Position', id));
   }
   addPosition(item: PositionModel) {
-    return this.http.post(this.BASE_URL,item).subscribe(() => this.refreshData());
+    return this.http.post(apiUrl('Position'), item).subscribe(() => this.refreshData());
   }
   updatePosition(item: PositionModel){
-    return this.http.put<number>(this.BASE_URL+item.positionCode, item).subscribe(() => this.refreshData());
+    return this.http.put<number>(apiUrl('Position', item.positionCode), item).subscribe(() => this.refreshData());
   }
  
   deletePosition(id:number) {
-    return this.http.delete<number>(this.BASE_URL+id).subscribe(() => this.refreshData())
+    return this.http.delete<number>(apiUrl('Position', id)).subscribe(() => this.refreshData())
   }
    refreshData(){
     this.getAllPositions().subscribe(x => this.positions = x);
