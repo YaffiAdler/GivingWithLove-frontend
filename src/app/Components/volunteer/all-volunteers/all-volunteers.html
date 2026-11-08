@@ -3,40 +3,33 @@
   <div class="header">
     <div class="title">רשימת מתנדבים</div>
 
-    <button *ngIf="isD"
-            class="close-btn"
-            mat-icon-button>
-      <mat-icon>close</mat-icon>
-    </button>
+    @if (isD) {
+      <button class="close-btn"
+              mat-icon-button>
+        <mat-icon>close</mat-icon>
+      </button>
+    }
   </div>
 
   <!-- חיפוש -->
   <div class="search-box">
     <input type="text"
            class="input"
-           [formControl]="searchControl"
+           [formControl]="volunteers.searchControl"
            placeholder="חפש מתנדב...">
   </div>
 
   <!-- טבלה -->
   <div class="table-wrapper">
 
-    <table class="donors-table">
+    <table class="donors-table" appFixedDirectionSort matSortActive="name" matSortDirection="asc" matSortDisableClear
+           (matSortChange)="changeSort($event)">
 
       <thead>
         <tr>
-          <th>קוד איחוד</th>
-          <th>שם</th>
+          <th mat-sort-header="code">קוד איחוד</th>
+          <th mat-sort-header="name">שם</th>
           <th>תפקיד</th>
-          <th>שם האב</th>
-          <th>שטיבל</th>
-          <th>רחוב</th>
-          <th>מספר בניין</th>
-          <th>עיר</th>
-          <th>מיקוד</th>
-          <th>טלפון בית</th>
-          <th>פלאפון</th>
-          <th>הורי האם</th>
           <th>התנדבות</th>
           <th>פרטים</th>
           <th>השהיה</th>
@@ -47,27 +40,22 @@
       </thead>
 
       <tbody>
-        <tr *ngFor="let d of filteredList; let j = index">
+        @if (volunteers.loading()) {
+          <tr><td colspan="7">טוען נתונים...</td></tr>
+        } @else if (volunteers.failed()) {
+          <tr><td colspan="7">שגיאה בטעינת הנתונים</td></tr>
+        } @else {
+        @for (d of volunteers.items(); track d.volunteerCode) {
+        <tr>
 
           <td>{{d.volunteerCode}}</td>
 
           <td>
-            {{d.volunteerCodeNavigation?.tohar}}
-            {{d.volunteerCodeNavigation?.firstName}}
-            {{d.volunteerCodeNavigation?.familyName}}
-            {{d.volunteerCodeNavigation?.ending}}
+            {{d.firstName}}
+            {{d.familyName}}
           </td>
 
           <td>{{d.positionName}}</td>
-          <td>{{d.volunteerCodeNavigation?.fathersName}}</td>
-          <td>{{d.volunteerCodeNavigation?.shtibel}}</td>
-          <td>{{d.volunteerCodeNavigation?.street}}</td>
-          <td>{{d.volunteerCodeNavigation?.house}}</td>
-          <td>{{d.volunteerCodeNavigation?.city}}</td>
-          <td>{{d.volunteerCodeNavigation?.zipCode}}</td>
-          <td>{{d.volunteerCodeNavigation?.housePhone}}</td>
-          <td>{{d.volunteerCodeNavigation?.cellPhone}}</td>
-          <td>{{d.volunteerCodeNavigation?.shver}}</td>
 
           <td>
             <button class="btn small" (click)="goToVolunteering(d)">
@@ -92,9 +80,18 @@
             </td>
 
         </tr>
+        } @empty {
+          <tr><td colspan="7">לא נמצאו מתנדבים</td></tr>
+        }
+        }
       </tbody>
 
     </table>
+
+    <mat-paginator [length]="volunteers.totalCount()" [pageIndex]="volunteers.pageIndex()"
+                   [pageSize]="volunteers.pageSize()" [pageSizeOptions]="volunteers.pageSizeOptions"
+                   (page)="volunteers.changePage($event)">
+    </mat-paginator>
 
   </div>
 

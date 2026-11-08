@@ -1,39 +1,12 @@
-<!-- <p>volunteer-domain works!</p> -->
-<!-- <h3>מהם תחומי ההתנדבות המרכזיים של מתנדב זה:</h3> -->
-
-
-
-
- <form [formGroup]="vlntrDmnFrm" dir="rtl">
+<form [formGroup]="vlntrDmnFrm" dir="rtl">
 <div class="volunteer-domains-section">
   <label for="domain"> תחום ההתנדבות:</label>
-<!-- <select class="form-control" formControlName="position">
-  <option *ngFor="let p of listP" [value]="p.positionCode">
-    {{ p.positionName }}
-  </option>
-</select> -->
   <select class="form-control" formControlName="domain"  name="domain" id="1"  >
-    <option *ngFor="let p of listProject" [value]="p.projectCode">
-    {{p.projectName}}</option>
+    @for (p of projects(); track p.projectCode) {
+      <option [ngValue]="p.projectCode">
+      {{p.projectName}}</option>
+    }
   </select>
 </div>
-</form> 
+</form>
   <button type="button" (click)="addDomain()" >➕ להוספת תחום</button>
-
-
-
-
-<!-- 
-
- <form [formGroup]="vlntrDmnFrm" dir="rtl">
-<div class="volunteer-domains-section">
-  <label for="domain"> תחום ההתנדבות:</label>
-
-  <select class="form-control" formControlName="domain" type="text" name="domain" id="1"  autocomplete="on">
-    <tr *ngFor="let p of listProject; let j = index">
-    <option placeholder="שם תחום" value="{{p.projectCode}}">{{p.projectName}}</option></tr>
-  </select>
-</div>
-</form> 
-  <button type="button" (click)="addDomain()" > ➕</button> -->
-

@@ -1,323 +1,67 @@
-<!-- <h1>volunteer-details works!</h1>
-<div class="volunteer-details" [@fadeIn]>
-  <h2>פרטי מתנדב</h2>
-  <div class="volunteer-info">
-    <p><strong>קוד מתנדב:</strong> {{volunteer.volunteerCode}}</p>
-    <p><strong>תפקיד:</strong> {{volunteer.positionName}}</p>
-    <p><strong>איחוד:</strong> {{volunteer.volunteerCodeNavigation?.eichudCode}}</p>
-  </div>
-
-  <h3>התנדבויות אחרונות</h3>
-  <table class="table">
-    <thead>
-      <tr>
-        <th>תאריך</th>
-        <th>פרויקט</th>
-        <th>תת-פרויקט</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let v of volunteerings | orderByDate">
-        <td>{{v.dateOfVolunteering | date:'dd/MM/yyyy'}}</td>
-        <td>{{v.projectCode}}</td>
-        <td>{{v.subProjectCode}}</td>
-      </tr>
-    </tbody>
-  </table>
-
-  <h3>גרף פעילות חודשי</h3>
-  <div style="display: block;">
-    <canvas baseChart
-            [datasets]="barChartData"
-            [labels]="barChartLabels"
-            [options]="barChartOptions"
-            [legend]="barChartLegend"
-            [chartType]="barChartType">
-    </canvas>
-  </div>
-
-  <h3>פילוח לפי תחומים</h3>
-  <div style="display: block;">
-    <canvas baseChart
-            [data]="pieChartData"
-            [labels]="pieChartLabels"
-            [chartType]="pieChartType"
-            [options]="pieChartOptions">
-    </canvas>
-  </div>
-</div> -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- <h1>פרטי מתנדב</h1>
-<button mat-icon-button (click)="close()" style="float: right;">
-  <mat-icon>close</mat-icon>
-</button>
-
-<div class="volunteer-details">
-  <div class="volunteer-info">
-    <p><strong>קוד מתנדב:</strong> {{volunteer.volunteerCode}}</p>
-    <p><strong>תפקיד:</strong> {{volunteer.positionName}}</p>
-    <p><strong>איחוד:</strong> {{volunteer.volunteerCodeNavigation?.eichudCode}}</p>
-  </div>
-
-  <h3>התנדבויות אחרונות</h3>
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th>תאריך</th>
-        <th>פרויקט</th>
-        <th>תת-פרויקט</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let v of volunteerings">
-        <td>{{ v.dateOfVolunteering | date:'dd/MM/yyyy' }}</td>
-        <td>{{ v.projectCode }}</td>
-        <td>{{ v.subProjectCode }}</td>
-      </tr>
-    </tbody>
-  </table>
-
-  <h3>פילוח לפי תחומים</h3>
-  <div style="display: block;">
-    <p-chart type="pie" [data]="pieChartDataForPrime" [options]="pieChartOptions"></p-chart>
-  </div>
-
-  <h3>גרף פעילות חודשי</h3>
-  <div style="display: block;">
-    <p-chart type="bar" [data]="barChartDataForPrime" [options]="barChartOptionsForPrime"></p-chart>
-  </div>
-</div> -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- [@fadeIn] -->
-<h1>פרטי מתנדב</h1>
-<div class="volunteer-details"   >
-   <button mat-icon-button (click)="close()" style="float: right;">
-  <mat-icon>close</mat-icon>
-    </button>
-  <div class="volunteer-info">
-    <p><strong>קוד מתנדב:</strong> {{volunteer.volunteerCode}}</p>
-    <p><strong>תפקיד:</strong> {{volunteer.positionName}}</p>
-    <p><strong>איחוד:</strong> {{volunteer.volunteerCodeNavigation?.eichudCode}}</p>
-  </div>
-
-  <h3>התנדבויות אחרונות</h3>
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th>תאריך</th>
-        <th>פרויקט</th>
-        <th>תת-פרויקט</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let v of volunteerings ">
-        <td>{{ v.dateOfVolunteering | date:'dd/MM/yyyy' }}</td>
-        <td>{{ v.projectCode }}</td>
-        <td>{{ v.subProjectCode }}</td>
-      </tr>
-    </tbody>
-  </table>  
-
-
-  <h3>פילוח לפי תחומים</h3>
-<div class="chart-container">
-  <p-chart
-    type="pie"
-    [data]="pieChartDataForPrime"
-    [options]="pieChartOptions">
-  </p-chart>
-</div>
-
-<h3>גרף פעילות חודשי</h3>
-<div class="chart-container">
-  <p-chart
-    type="bar"
-    [data]="barChartDataForPrime"
-    [options]="barChartOptionsForPrime">
-  </p-chart>
-</div>
-  <!-- <h3>פילוח לפי תחומים</h3>
-  <div style="display: block;">
-    <p-chart type="pie" [data]="pieChartDataForPrime" [options]="pieChartOptions"></p-chart>
-  </div>
-  <h3>גרף פעילות חודשי</h3>
-<div style="display: block;">
-  <p-chart type="bar" [data]="barChartDataForPrime" [options]="barChartOptionsForPrime"></p-chart> -->
-</div>
-
-  <!-- <h3>גרף פעילות חודשי</h3>
-  <div style="display: block;">
-    <canvas baseChart
-            [datasets]="barChartData"
-            [labels]="barChartLabels"
-            [options]="barChartOptions"
-            [legend]="barChartLegend"
-            [chartType]="barChartType">
-    </canvas>
-  </div>
-
-  <h3>פילוח לפי תחומים</h3>
-  <div style="display: block;">
-    <canvas baseChart
-            [data]="pieChartData"
-            [labels]="pieChartLabels"
-            [chartType]="pieChartType"
-            [options]="pieChartOptions">
-    </canvas>
-  </div> 
-</div> -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- 
-
 <h1>פרטי מתנדב</h1>
 <div class="volunteer-details">
+  <button mat-icon-button (click)="close()" style="float: right;">
+    <mat-icon>close</mat-icon>
+  </button>
 
-  <div class="volunteer-info">
-    <p><strong>קוד מתנדב:</strong> {{volunteer.volunteerCode}}</p>
-    <p><strong>תפקיד:</strong> {{volunteer.positionName}}</p>
-    <p><strong>איחוד:</strong> {{volunteer.volunteerCodeNavigation?.eichudCode}}</p>
-  </div>
+  @if (volunteer(); as volunteer) {
+    <div class="volunteer-info">
+      <p><strong>קוד מתנדב:</strong> {{volunteer.volunteerCode}}</p>
+      <p><strong>תפקיד:</strong> {{volunteer.positionName}}</p>
+      <p><strong>איחוד:</strong> {{volunteer.volunteerCode}}</p>
+      <p><strong>שם האב:</strong> {{ display(volunteer.fathersName) }}</p>
+      <p><strong>שטיבל:</strong> {{ display(volunteer.shtibel) }}</p>
+      <p><strong>רחוב:</strong> {{ display(volunteer.street) }}</p>
+      <p><strong>מספר בניין:</strong> {{ display(volunteer.house) }}</p>
+      <p><strong>עיר:</strong> {{ display(volunteer.city) }}</p>
+      <p><strong>מיקוד:</strong> {{ display(volunteer.zipCode) }}</p>
+      <p><strong>טלפון בית:</strong> {{ display(volunteer.housePhone) }}</p>
+      <p><strong>פלאפון:</strong> {{ display(volunteer.cellPhone) }}</p>
+      <p><strong>הורי האם:</strong> {{ display(volunteer.shver) }}</p>
+    </div>
 
-   <h3>התנדבויות אחרונות</h3>
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th>תאריך</th>
-        <th>פרויקט</th>
-        <th>תת-פרויקט</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let v of volunteerings ">
-        <td>{{ v.dateOfVolunteering | date:'dd/MM/yyyy' }}</td>
-        <td>{{ v.projectCode }}</td>
-        <td>{{ v.subProjectCode }}</td>
-      </tr>
-    </tbody>
-  </table>
+    <h3>התנדבויות אחרונות</h3>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>תאריך</th>
+          <th>פרויקט</th>
+          <th>תת-פרויקט</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (v of volunteerings(); track v.volunteeringCode) {
+          <tr>
+            <td>{{ v.dateOfVolunteering | date:'dd/MM/yyyy' }}</td>
+            <td>{{ v.projectCode }}</td>
+            <td>{{ v.subProjectCode }}</td>
+          </tr>
+        } @empty {
+          <tr><td colspan="3">אין התנדבויות</td></tr>
+        }
+      </tbody>
+    </table>
 
+    <h3>פילוח לפי תחומים</h3>
+    <div class="chart-container">
+      <p-chart
+        type="pie"
+        [data]="pieChartDataForPrime"
+        [options]="pieChartOptions">
+      </p-chart>
+    </div>
 
-
-</div> -->
+    <h3>גרף פעילות חודשי</h3>
+    <div class="chart-container">
+      <p-chart
+        type="bar"
+        [data]="barChartDataForPrime"
+        [options]="barChartOptionsForPrime">
+      </p-chart>
+    </div>
+  } @else if (loadFailed()) {
+    <div>שגיאה בטעינת פרטי המתנדב</div>
+  } @else {
+    <div>טוען נתונים...</div>
+  }
+</div>

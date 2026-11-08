@@ -3,48 +3,30 @@
 
   <div class="title">פעילות הארגון</div>
 
+  <!-- TODO(FE-04): replace with stats API -->
   <div class="cards-container">
-
     <div class="card">
-      <h2>מספר מתנדבים</h2>
-      <div class="value">{{ volunteerSrv.volunteers.length }}</div>
+      <h2>נתוני הסטטיסטיקה יוצגו כאן בקרוב</h2>
     </div>
-
-    <div class="card">
-      <h2>מספר התנדבויות</h2>
-      <div class="value">{{ volunteeringArr.length }}</div>
-    </div>
-
-    <div class="card">
-      <h2>שווי התנדבויות</h2>
-      <div class="value">₪ {{ estimatedCost }}</div>
-    </div>
-
-    <div class="card">
-      <h2>שעות התנדבות</h2>
-      <div class="value">{{ estimatedTime }}</div>
-    </div>
-
   </div>
 
   <div class="projects-section">
 
     <div class="section-title">פילוח לפי אגפים</div>
 
-    @for(p of Projects; track p; let j = $index) {
-      @if(p.domainCode == null) {
+    @for(p of departments(); track p.projectCode) {
 
         <div class="project">
 
-          <a [routerLink]="['/midData', p?.projectCode]"
+          <a [routerLink]="['/midData', p.projectCode]"
              class="mid-project">
             {{ p.projectName }}
           </a>
 
-          @if(p.inverseDomainCodeNavigation) {
+          @if(p.projects.length) {
             <div class="sub-projects">
 
-              @for(q of p.inverseDomainCodeNavigation; track q) {
+              @for(q of p.projects; track q.projectCode) {
                 <a [routerLink]="['/deepDataDisplay', q.projectCode]"
                    class="sub-project">
                   {{ q.projectName }}
@@ -56,65 +38,8 @@
 
         </div>
 
-      }
     }
 
   </div>
 
-  
-    <div class="actions">
-      <button class="btn" (click)="back()">איפוס</button>
-      <button class="btn export" (click)="exportCSV()">ייצוא CSV</button>
-    </div>
-
   </div>
-
-  <div class="filters">
-
-    <div class="chips">
-
-      @if(state().project) {
-        <div class="chip">פרויקט: {{ state().project }}</div>
-      }
-
-      @if(state().subProject) {
-        <div class="chip">תת פרויקט: {{ state().subProject }}</div>
-      }
-
-    </div>
-
-  </div>
-
-  <div class="grid">
-
-    <div class="chart-box">
-      <h3>פילוח פרויקטים</h3>
-      <canvas baseChart
-              [data]="projectChart"
-              [options]="chartOptions"
-              [type]="'bar'"
-              (chartClick)="onProjectClick($event)">
-      </canvas>
-    </div>
-
-    <div class="chart-box">
-      <h3>תתי פרויקטים</h3>
-      <canvas baseChart
-              [data]="subProjectChart"
-              [options]="chartOptions"
-              [type]="'pie'"
-              (chartClick)="onSubProjectClick($event)">
-      </canvas>
-    </div>
-
-    <div class="chart-box">
-      <h3>מתנדבים פעילים</h3>
-      <canvas baseChart
-              [data]="volunteerChart"
-              [options]="chartOptions"
-              [type]="'doughnut'">
-      </canvas>
-    </div>
-
-  </div>
-

@@ -1,60 +1,51 @@
-import { Component, inject } from '@angular/core';
-import { SubProjectService } from '../../Services/sub-project-service';
+import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { SubProjectModule } from '../../Models/sub-project/sub-project-module';
-import { ProjectModule } from '../../Models/project/project-module';
-import { ProjectService } from '../../Services/project-service';
-import { CommonModule } from '@angular/common';
-import { VolunteeringService } from '../../Services/volunteering-service';
-import { lastValueFrom } from 'rxjs';
+import { forkJoin } from 'rxjs';
+import { ProjectApiService } from '../../core/api/project-api.service';
+import { SubProjectApiService } from '../../core/api/sub-project-api.service';
+import { Project } from '../../models/project.model';
+import { SubProject as SubProjectItem } from '../../models/sub-project.model';
+import { LoadState } from '../../shared/loading/load-state';
 
 @Component({
   selector: 'app-sub-project',
-  imports: [CommonModule,RouterModule],
+  imports: [RouterModule],
   templateUrl: './sub-project.html',
   styleUrl: './sub-project.scss'
 })
-export class SubProject {
-  filteredSubProjects: SubProjectModule[] = [];
-  filteredProjects: ProjectModule[] = [];
-  Projects: ProjectModule[] = [];
-  subProjects: SubProjectModule[] = [];
-  ProjectService = inject(ProjectService)
-  subProjectService = inject(SubProjectService)
-  projectCode!: string | null;
-  projectName!: string | null;
-  router=inject(Router)
-  flag:boolean=false
-  volunteeringSrv=inject(VolunteeringService)
-  constructor(private route: ActivatedRoute) { }
+export class SubProject implements OnInit {
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly projectApi = inject(ProjectApiService);
+  private readonly subProjectApi = inject(SubProjectApiService);
 
-  async ngOnInit() {
-    this.projectCode = this.route.snapshot.paramMap.get('id');
-    this.projectName = this.route.snapshot.paramMap.get('name');
+  readonly filteredProjects = signal<Project[]>([]);
+  readonly subProjects = signal<SubProjectItem[]>([]);
+  readonly loadState = signal<LoadState>('loading');
 
-    // טען את כל הפרויקטים
-    try {
-      this.Projects = await lastValueFrom(this.ProjectService.getAllProjects());
-      this.filteredProjects = this.Projects.filter(sp => sp.domainCode?.toString() === this.projectCode);
-    } catch (err) {
-      console.error('Failed to load projects', err);
-    }
+  ngOnInit() {
+    const departmentCode = this.route.snapshot.paramMap.get('id');
 
-    // טען את כל תתי-הפרויקטים
-    try {
-      this.subProjects = await lastValueFrom(this.subProjectService.getAllProjects());
-    } catch (err) {
-      console.error('Failed to load sub-projects', err);
-    }
-    this.filteredSubProjects = [];
-    for (let sp of this.filteredProjects) {
-      this.filteredSubProjects.push(...this.subProjects.filter(x => x.projectCode === sp.projectCode));
-    }
+    forkJoin({ projects: this.projectApi.getAll(), subProjects: this.subProjectApi.getAll() })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: ({ projects, subProjects }) => {
+          this.filteredProjects.set(
+            projects.filter((project) => project.domainCode?.toString() === departmentCode),
+          );
+          this.subProjects.set(subProjects);
+          this.loadState.set('ready');
+        },
+        // The error interceptor already showed the message; the page shows its error state.
+        error: () => this.loadState.set('error'),
+      });
   }
-   async goToVolunteering(p:any){
-   await this.volunteeringSrv.setSelectedProject(Number(p.projectCode));
-   await this.volunteeringSrv.setSelectedSubProject(Number(p.subProjectCode));
-    this.router.navigate(['/v']);
 
-  }}
-
+  goToVolunteering(subProject: SubProjectItem) {
+    this.router.navigate(['/v'], {
+      queryParams: { projectCode: subProject.projectCode, subProjectCode: subProject.subProjectCode },
+    });
+  }
+}

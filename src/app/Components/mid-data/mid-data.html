@@ -1,45 +1,33 @@
 <div class="page">
 
+  @if (department(); as project) {
   <div class="header">
     <div class="title">{{ project.projectName }}</div>
     <div class="subtitle">
-      {{ project.inverseDomainCodeNavigation?.length }} תתי פרויקטים
+      {{ project.projects.length }} תתי פרויקטים
     </div>
   </div>
 
-  @if(project.inverseDomainCodeNavigation){
+  @if(project.projects.length){
     <div class="sub-links">
-      @for (q of project.inverseDomainCodeNavigation; track q) {
+      @for (q of project.projects; track q.projectCode) {
         <a [routerLink]="['/deepDataDisplay', q.projectCode]" class="sub-project">
           {{ q.projectName }}
         </a>
       }
     </div>
   }
+  } @else if (loaded()) {
+    <div class="header">
+      <div class="title">האגף לא נמצא</div>
+    </div>
+  }
 
-  <!-- כרטיסים -->
+  <!-- TODO(FE-04): replace with stats API -->
   <div class="cards-container">
-
     <div class="card">
-      <h2>מספר מתנדבים</h2>
-      <div class="value">{{ volunteerDomainArrPerBigProject.length }}</div>
+      <h2>נתוני הסטטיסטיקה יוצגו כאן בקרוב</h2>
     </div>
-
-    <div class="card">
-      <h2>מספר התנדבויות</h2>
-      <div class="value">{{ volunteeringArrToProject.length }}</div>
-    </div>
-
-    <div class="card">
-      <h2>שווי התנדבויות</h2>
-      <div class="value">₪ {{ estimatedCost }}</div>
-    </div>
-
-    <div class="card">
-      <h2>שעות התנדבות</h2>
-      <div class="value">{{ estimatedTime }}</div>
-    </div>
-
   </div>
 
 </div>

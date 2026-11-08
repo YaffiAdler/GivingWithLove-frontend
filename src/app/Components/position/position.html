@@ -12,10 +12,20 @@
       </thead>
 
       <tbody>
-        <tr *ngFor="let p of positionService.positions$ | async; let j = index">
-          <td>{{ p.positionCode }}</td>
-          <td>{{ p.positionName }}</td>
-        </tr>
+        @if (loadState() === 'loading') {
+          <tr><td colspan="2">טוען נתונים...</td></tr>
+        } @else if (loadState() === 'error') {
+          <tr><td colspan="2">שגיאה בטעינת התפקידים</td></tr>
+        } @else {
+          @for (p of positions(); track p.positionCode) {
+            <tr>
+              <td>{{ p.positionCode }}</td>
+              <td>{{ p.positionName }}</td>
+            </tr>
+          } @empty {
+            <tr><td colspan="2">אין תפקידים</td></tr>
+          }
+        }
       </tbody>
     </table>
   </div>

@@ -1,0 +1,12 @@
+<input
+  type="text"
+  class="input"
+  [formControl]="textControl"
+  [matAutocomplete]="auto"
+  [placeholder]="placeholder()"
+>
+<mat-autocomplete #auto="matAutocomplete" [displayWith]="displayLabel" (optionSelected)="choose($event)">
+  @for (person of options(); track person.code) {
+    <mat-option [value]="person">{{ person.label }}</mat-option>
+  }
+</mat-autocomplete>
