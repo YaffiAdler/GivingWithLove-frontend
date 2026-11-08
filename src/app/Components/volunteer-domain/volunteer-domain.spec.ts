@@ -13,6 +13,7 @@ describe('VolunteerDomain', () => {
     .compileComponents();
 
     fixture = TestBed.createComponent(VolunteerDomain);
+    fixture.componentRef.setInput('projects', []);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

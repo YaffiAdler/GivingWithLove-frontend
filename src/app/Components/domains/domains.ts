@@ -1,50 +1,36 @@
-import { Component, inject } from '@angular/core';
-import { ProjectModule } from '../../Models/project/project-module';
-import { ProjectService } from '../../Services/project-service';
-import { VolunteerService } from '../../Services/volunteer-service';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, computed, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterModule, RouterOutlet } from '@angular/router';
-import { Project } from '../project/project';
-import { SubProject } from '../sub-project/sub-project';
+import { ProjectApiService } from '../../core/api/project-api.service';
+import { Project } from '../../models/project.model';
+import { LoadState } from '../../shared/loading/load-state';
 
 @Component({
   selector: 'app-domains',
-  imports: [RouterOutlet,RouterModule,Project,SubProject],
+  imports: [RouterOutlet, RouterModule],
   templateUrl: './domains.html',
   styleUrl: './domains.scss',
 })
-export class Domains {
-projectsArr: ProjectModule[] = [];
-  projectService = inject(ProjectService)
-  vlntService=inject(VolunteerService)
-  // volunteerService = inject(VolunteerService)
-  ngOnInit() {
-    this.projectService.getAllProjects().subscribe( res => {this.vlntService.refreshData();
-       this.projectsArr = res })
-  }
-   frm = new FormGroup({
-    // volunteeringCode: new FormControl<number | null>(null, Validators.required),
-    projectName: new FormControl<string | null>(null, Validators.required),
-    projectManager: new FormControl<number | null>(null),
-    domainCode: new FormControl<number | null>(null)
-      });
-  addProject() {
-    if (this.frm.valid) {
-      const project = {
-        // volunteeringCode: this.vlntrFrm.controls['volunteerCode'].value!,
-        projectName: this.frm.value.projectName!,
-        projectManagerCode: this.frm.value.projectManager!,
-        domainCode: this.frm.value.domainCode!,
-       
-      }
-      this.projectService.addProject(project);
-    }
-  }
-  updateProject(p: ProjectModule) {
-    this.projectService.updateProject(p);
-  }
+export class Domains implements OnInit {
+  private readonly projectApi = inject(ProjectApiService);
+  private readonly destroyRef = inject(DestroyRef);
 
-  getProject() {
-    this.projectService.getAllProjects().subscribe(res => { this.projectsArr = res })
+  private readonly projects = signal<Project[]>([]);
+  readonly loadState = signal<LoadState>('loading');
+  /** Projects without a parent domain are the departments listed here. */
+  readonly departments = computed(() => this.projects().filter((p) => p.domainCode == null));
+
+  ngOnInit() {
+    this.projectApi
+      .getAll()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (projects) => {
+          this.projects.set(projects);
+          this.loadState.set('ready');
+        },
+        // The error interceptor already showed the message; the list shows its error state.
+        error: () => this.loadState.set('error'),
+      });
   }
 }

@@ -4,11 +4,19 @@
 
   <!-- רשימת פרויקטים -->
   <div class="list-card">
-    @for(p of projectService.Projects$ | async; track p; let j = $index) {
-      <div class="project-row">
-        <span class="code">{{ p.projectCode }}</span>
-        <span class="name">{{ p.projectName }}</span>
-      </div>
+    @if (loadState() === 'loading') {
+      <div class="project-row">טוען נתונים...</div>
+    } @else if (loadState() === 'error') {
+      <div class="project-row">שגיאה בטעינת הפרויקטים</div>
+    } @else {
+      @for(p of projects(); track p.projectCode) {
+        <div class="project-row">
+          <span class="code">{{ p.projectCode }}</span>
+          <span class="name">{{ p.projectName }}</span>
+        </div>
+      } @empty {
+        <div class="project-row">אין פרויקטים</div>
+      }
     }
   </div>
 
@@ -22,21 +30,16 @@
 
     <div class="form-group">
       <label>מנהל הפרויקט</label>
-      <select class="input" formControlName="projectManager">
-        @for(m of vlntService.volunteers; track m; let j = $index){
-          <option value="{{m.volunteerCode}}">
-            {{m.volunteerCodeNavigation?.firstName}}
-          </option>
-        }
-      </select>
+      <app-person-picker [control]="frm.controls.projectManagerCode" [search]="searchManagers">
+      </app-person-picker>
     </div>
 
     <div class="form-group">
       <label>תחום הפרויקט</label>
       <select class="input" formControlName="domainCode">
-        @for(p of projectsArr; track p; let j = $index){
+        @for(p of projects(); track p.projectCode){
           @if(p.domainCode == null){
-            <option value="{{p.projectCode}}">
+            <option [ngValue]="p.projectCode">
               {{p.projectName}}
             </option>
           }

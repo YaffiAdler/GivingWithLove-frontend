@@ -1,13 +1,18 @@
 <div class="page-container">
 
   <!-- טבלה -->
+  <div class="search-box">
+    <input type="text" class="input" [formControl]="people.searchControl" placeholder="חפש לפי שם או קוד...">
+  </div>
+
   <div class="table-wrapper">
-    <table class="donors-table">
+    <table class="donors-table" appFixedDirectionSort matSortActive="name" matSortDirection="asc" matSortDisableClear
+           (matSortChange)="changeSort($event)">
       <thead>
         <tr>
-          <th>קוד איחוד</th>
+          <th mat-sort-header="code">קוד איחוד</th>
           <th>תואר</th>
-          <th>שם משפחה</th>
+          <th mat-sort-header="name">שם משפחה</th>
           <th>שם פרטי</th>
           <th>סיום</th>
           <th>שם האב</th>
@@ -23,26 +28,38 @@
       </thead>
 
       <tbody>
-        @for(d of eichudService.peopleInTheEichud$ | async; track d.eichudCode; let i=$index){
-          <tr>
-            <td>{{d.eichudCode}}</td>
-            <td>{{d.tohar}}</td>
-            <td>{{d.familyName}}</td>
-            <td>{{d.firstName}}</td>
-            <td>{{d.ending}}</td>
-            <td>{{d.fathersName}}</td>
-            <td>{{d.shtibel}}</td>
-            <td>{{d.street}}</td>
-            <td>{{d.house}}</td>
-            <td>{{d.city}}</td>
-            <td>{{d.zipCode}}</td>
-            <td>{{d.housePhone}}</td>
-            <td>{{d.cellPhone}}</td>
-            <td>{{d.shver}}</td>
-          </tr>
+        @if (people.loading()) {
+          <tr><td colspan="14">טוען נתונים...</td></tr>
+        } @else if (people.failed()) {
+          <tr><td colspan="14">שגיאה בטעינת הנתונים</td></tr>
+        } @else {
+          @for(d of people.items(); track d.eichudCode){
+            <tr>
+              <td>{{d.eichudCode}}</td>
+              <td>{{d.tohar}}</td>
+              <td>{{d.familyName}}</td>
+              <td>{{d.firstName}}</td>
+              <td>{{d.ending}}</td>
+              <td>{{d.fathersName}}</td>
+              <td>{{d.shtibel}}</td>
+              <td>{{d.street}}</td>
+              <td>{{d.house}}</td>
+              <td>{{d.city}}</td>
+              <td>{{d.zipCode}}</td>
+              <td>{{d.housePhone}}</td>
+              <td>{{d.cellPhone}}</td>
+              <td>{{d.shver}}</td>
+            </tr>
+          } @empty {
+            <tr><td colspan="14">לא נמצאו אנשים</td></tr>
+          }
         }
       </tbody>
     </table>
+    <mat-paginator [length]="people.totalCount()" [pageIndex]="people.pageIndex()"
+                   [pageSize]="people.pageSize()" [pageSizeOptions]="people.pageSizeOptions"
+                   (page)="people.changePage($event)">
+    </mat-paginator>
   </div>
 
   <!-- טופס -->

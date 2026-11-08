@@ -45,6 +45,7 @@ git push -u origin <branch>
 ```
 
 Use Conventional Commits types: `feat`, `fix`, `refactor`, `chore`, `test`, `docs`.
+Never add a `Co-Authored-By` line or any other AI attribution to proposed commit messages or PR descriptions (owner's decision).
 
 ## 4. Language
 
@@ -78,6 +79,11 @@ Use Conventional Commits types: `feat`, `fix`, `refactor`, `chore`, `test`, `doc
 - Controllers return `ActionResult<T>` with correct status codes (200, 201, 204, 400, 404). Errors go through ProblemDetails. No `try/catch` that returns `bool`.
 - "Not found" is a dedicated exception thrown in Bl and mapped to 404 by the global exception handler.
 - DTOs live in `Bl/Dtos/<Entity>/`. Mapping lives in `Bl/Mapping/` (one mapper per entity). Query result records that Dal returns live in `Dal/Queries/`.
+- **Scale (owner's requirement):** the system must handle many thousands of rows per table (design for at least 100,000 Volunteering rows and tens of thousands of Eichud people). The local database is small today, so "it is fast on my machine" proves nothing. Therefore:
+  - List endpoints of large tables (Volunteering, Volunteer, Eichud) are paged on the server: `page` (1-based), `pageSize` (default 25, maximum 100), optional `search` and `sort`, and they return `PagedResult<T> { Items, TotalCount, Page, PageSize }`. Sorting is stable (always ends with the primary key). Small lookup tables (Position, Project, SubProject, the project tree) may return the full list.
+  - Never return a whole large table, never load it into memory, never count or aggregate in C#. `Count`, `Sum` and `GroupBy` run in SQL.
+  - The number of SQL queries per request is constant; it does not grow with the number of rows (no N+1).
+  - Filters and sorts use indexed columns. If a query needs an index that does not exist, write it in `docs/sql/indexes.sql` and tell the owner; never change the database schema yourself.
 
 ## 7. Never mix entities
 
@@ -109,6 +115,7 @@ src/app/
 - API services (`core/api/<resource>-api.service.ts`): stateless, return `Observable`, one per backend resource, never `subscribe` inside. URLs are built from `environment.apiUrl`.
 - State: local component `signal`s; a feature store with signals only when several components share the state. No public mutable arrays on services. Selection between pages goes through route parameters.
 - Components never use `HttpClient` directly and never aggregate business data — the server returns ready numbers.
+- Scale: large lists (volunteerings, volunteers, Eichud people) use server-side paging, sorting and search (`mat-paginator` / `mat-sort` bound to the API's `page`, `pageSize`, `sort`, `search`; search input debounced ~300 ms with `switchMap` cancelling the previous request). Never download a whole large table to filter it in the browser. Dropdowns that pick a person use a server-side autocomplete, not a full list.
 - Prefer `toSignal` / `rxResource` / `async` pipe. Manual subscriptions use `takeUntilDestroyed(this.destroyRef)`.
 - Templates: `@if` / `@for` with `track item.<id>`; every data view has loading, error and empty states.
 - Strict typing: no `any`, no non-null assertions to silence errors.

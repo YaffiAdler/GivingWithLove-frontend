@@ -3,13 +3,19 @@
   <label class="title">תחום הפרויקט</label>
 
   <div class="projects-list">
-    @for(p of projectsArr; track p; let j = $index){
-      @if(p.domainCode == null){
+    @if (loadState() === 'loading') {
+      <span>טוען נתונים...</span>
+    } @else if (loadState() === 'error') {
+      <span>שגיאה בטעינת התחומים</span>
+    } @else {
+      @for(p of departments(); track p.projectCode){
         <a
           class="project-link"
           [routerLink]="['sub', p.projectCode , p.projectName]">
           {{p.projectName}}
         </a>
+      } @empty {
+        <span>אין תחומים</span>
       }
     }
   </div>

@@ -1,10 +1,10 @@
-@if(project.subProjects?.length) {
+@if(subProjects().length) {
 
   <div class="section-title">תתי פרויקטים</div>
 
-  @for(p of project.subProjects; track p) {
+  @for(p of subProjects(); track p.subProjectCode) {
     <div class="project">
-      <div>{{ p?.subProjectName }}</div>
+      <div>{{ p.subProjectName }}</div>
     </div>
   }
 
@@ -13,27 +13,11 @@
   <div class="empty-state">אין תתי פרויקטים</div>
 }
 
-<!-- ===== כרטיסי דאשבורד ===== -->
+<!-- TODO(FE-04): replace with stats API -->
 <div class="cards-container">
 
   <div class="card">
-    <h2>מספר מתנדבים</h2>
-    <div class="value">{{ project.volunteerDomains?.length }}</div>
-  </div>
-
-  <div class="card">
-    <h2>מספר התנדבויות</h2>
-    <div class="value">{{ volunteeringArrToProject.length }}</div>
-  </div>
-
-  <div class="card">
-    <h2>שווי התנדבויות</h2>
-    <div class="value">₪ {{ estimatedCost }}</div>
-  </div>
-
-  <div class="card">
-    <h2>שעות התנדבות</h2>
-    <div class="value">{{ estimatedTime }}</div>
+    <h2>נתוני הסטטיסטיקה יוצגו כאן בקרוב</h2>
   </div>
 
 </div>

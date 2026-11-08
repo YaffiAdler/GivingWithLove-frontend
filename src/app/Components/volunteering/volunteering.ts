@@ -1,397 +1,163 @@
-// import { VolunteeringService } from '../../Services/volunteering-service';
-// import { EichudModel } from '../../Models/EichudModel';
-
-// import { AsyncPipe, CommonModule, DatePipe } from '@angular/common';
-// import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-// import { VolunteerModel } from '../../Models/volunteer/volunteer-module';
-// import { VolunteerService } from '../../Services/volunteer-service';
-// import { EichudService } from '../../Services/eichud-service';
-// import { DataView } from 'primeng/dataview';
-// import { DatePicker, DatePickerModule } from 'primeng/datepicker';
-// import { ProjectService } from '../../Services/project-service';
-// import { ProjectModule } from '../../Models/project/project-module';
-// import { SubProjectService } from '../../Services/sub-project-service';
-// import { SubProjectModule } from '../../Models/sub-project/sub-project-module';
-// import { lastValueFrom } from 'rxjs';
-// import { AsyncAction } from 'rxjs/internal/scheduler/AsyncAction';
-// import { Component, inject } from '@angular/core';
-// import { VolunteeringModule } from '../../Models/volunteering/volunteering/volunteering-module';
-// import { NO_ERRORS_SCHEMA, SECURITY_SCHEMA } from '@angular/compiler';
-
-// @Component({
-//   selector: 'app-volunteering',
-//   imports: [AsyncPipe, ReactiveFormsModule, CommonModule],
-//   templateUrl: './volunteering.html',
-//   styleUrl: './volunteering.scss'
-// })
-// export class Volunteering {
-//   projectService = inject(ProjectService)
-//   projectsArr: ProjectModule[] = [];
-//   subProjectService = inject(SubProjectService)
-//   subProjects: SubProjectModule[] = [];
-//   filteredSubProjects: SubProjectModule[] = []; // מאגר ה-subProjects המותאם לפי projectCode
-//   // poorManService = inject(EichudService)
-//   volunteeringArr: VolunteeringModule[] = [];
-//   volunteerArr: VolunteerModel[] = []//מערך מתנדבים
-//   volunteeringService = inject(VolunteeringService)
-//   volunteerService = inject(VolunteerService)
-//   ecdService = inject(EichudService)
-
-//   vlntrFrm = new FormGroup({
-//     dateOfVolunteering: new FormControl<string | null>(null, Validators.required),
-
-//     volunteerCode: new FormControl<number | null>(this.volunteeringService.volunteerCodeInS ? this.volunteeringService.volunteerCodeInS : null, Validators.required),
-//     poorManCode: new FormControl<number | null>(this.volunteeringService.poorManCodeInS ? this.volunteeringService.poorManCodeInS : null, Validators.required),
-//     matcherCode: new FormControl<number | null>(this.volunteeringService.matcherCodeInS ? this.volunteeringService.matcherCodeInS : null, Validators.required),
-//     projectCode: new FormControl<number | null>(this.volunteeringService.projectCodeInS ? this.volunteeringService.projectCodeInS : null),
-//     subProjectCode: new FormControl<number | null>(this.volunteeringService.subProjectCodeInS ? this.volunteeringService.subProjectCodeInS : null)
-
-//   });
-//   async ngOnInit() {
-//     const today = new Date();
-
-//     const formatted =
-//       today.getFullYear() +
-//       '-' +
-//       String(today.getMonth() + 1).padStart(2, '0') +
-//       '-' +
-//       String(today.getDate()).padStart(2, '0');
-
-//     this.vlntrFrm.patchValue({
-//       dateOfVolunteering: formatted,
-//       volunteerCode: this.volunteeringService.volunteerCodeInS ,
-//       poorManCode: this.volunteeringService.poorManCodeInS ,
-//       matcherCode: this.volunteeringService.matcherCodeInS ,
-//       projectCode: this.volunteeringService.projectCodeInS ,
-//       subProjectCode: this.volunteeringService.subProjectCodeInS 
-//     });
-
-//     await lastValueFrom(this.volunteerService.getAllVolunteers()).then(res => { this.volunteerService.volunteers = res });
-//     await lastValueFrom(this.projectService.getAllProjects()).then(res => { this.projectsArr = res; this.projectService.projects = res });
-//     await this.volunteeringService.refreshData();
-//     await lastValueFrom(this.subProjectService.getAllProjects()).then(res => { this.subProjects = res; this.subProjectService.Projects = res });
-//     await lastValueFrom(this.ecdService.getAllEichud()).then(res => { this.ecdService.peopleInTheEichud = res });  
-//     await lastValueFrom(this.volunteeringService.getAllVolunteerings()).then(res => { this.volunteeringService.volunteerings = res ; this.volunteeringArr = res });  
-//     this.filteredSubProjects = await  this.subProjectService.Projects.filter(subPro => subPro.projectCode === Number(this.volunteeringService.projectCodeInS))
-
-//   }
-
-
-
-//   onProjectChange(event: Event) {
-//     const selectedProjectCode = (event.target as HTMLSelectElement).value;
-//     this.filteredSubProjects = this.subProjectService.Projects.filter(subPro => subPro.projectCode === Number(selectedProjectCode));
-//   }
- 
-//   addVolunteering() {
-//     if (this.vlntrFrm.valid) {
-//       const volunteering = {
-//         dateOfVolunteering: this.vlntrFrm.value.dateOfVolunteering!,
-//         volunteerCode: this.vlntrFrm.value.volunteerCode!,
-//         poorManCode: this.vlntrFrm.value.poorManCode!,
-//         matcherCode: this.vlntrFrm.value.matcherCode!,
-//         projectCode: this.vlntrFrm.value.projectCode!,
-//         subProjectCode: this.vlntrFrm.value.subProjectCode!
-//       }
-//       this.volunteeringService.addVolunteering(volunteering);
-//       alert(this.volunteeringArr.length)
-//       this.vlntrFrm.reset(); // איפוס הטופס לאחר הוספה
-//     }
-//   }
-//   deleteVolunteering(v: VolunteeringModule) {
-//     this.volunteeringService.addVolunteering(v);
-
-//   }
-//   updateVolunteering(v: VolunteeringModule) {
-//     this.volunteeringService.updateVolunteering(v);
-
-//   }
-//   getVolunteering() {
-//     this.volunteeringService.getAllVolunteerings().subscribe(res => { this.volunteeringArr = res })
-
-//   }
-
-// }
-
-
-
-
-
-
-
-
-
-
-// // import { VolunteeringService } from '../../Services/volunteering-service';
-// // <<<<<<< HEAD
-// // import { AsyncPipe, CommonModule } from '@angular/common';
-// // import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-// // import { VolunteerModel } from '../../Models/volunteer/volunteer-module';
-// // import { VolunteerService } from '../../Services/volunteer-service';
-// // import { ProjectService } from '../../Services/project-service';
-// // import { ProjectModule } from '../../Models/project/project-module';
-// // import { SubProjectModule } from '../../Models/sub-project/sub-project-module';
-// // import { SubProjectService } from '../../Services/sub-project-service';
-// // import { lastValueFrom } from 'rxjs';
-// // import { EichudService } from '../../Services/eichud-service';
-// // import { EichudModel } from '../../Models/EichudModel';
-// // =======
-// // import { AsyncPipe, CommonModule, DatePipe } from '@angular/common';
-// // import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-// // import { VolunteerModel } from '../../Models/volunteer/volunteer-module';
-
-// // import { EichudService } from '../../Services/eichud-service';
-// // import { DataView } from 'primeng/dataview';
-// // import { DatePicker, DatePickerModule } from 'primeng/datepicker';
-// // >>>>>>> 93a781744fd55843e6664a9d5e302f489ff1febe
-
-// // @Component({
-// //   selector: 'app-volunteering',
-// //   imports: [ ReactiveFormsModule, CommonModule],
-// //   templateUrl: './volunteering.html',
-// //   styleUrl: './volunteering.scss'
-// // })
-// // export class Volunteering {
-// //   volunteeringArr: VolunteeringModule[] = [];//מערך התנדבויות
-// //   projectsArr: ProjectModule[] = [];
-// //   subProjectService = inject(SubProjectService)
-// //   subProjects: SubProjectModule[] = [];
-// //   filteredSubProjects: SubProjectModule[] = []; // מאגר ה-subProjects המותאם לפי projectCode
-// //   // poorManService = inject(EichudService)
-// //   volunteeringArr: VolunteeringModule[] = [];
-// //   volunteerArr: VolunteerModel[] = []//מערך מתנדבים
-// //   volunteeringService = inject(VolunteeringService)
-// //   volunteerService = inject(VolunteerService)
-// //   ecdService = inject(EichudService)
-
-// //   vlntrFrm = new FormGroup({
-// //     dateOfVolunteering: new FormControl<string | null>(null, Validators.required),
-
-// //     volunteerCode: new FormControl<number | null>(this.volunteeringService.volunteerCodeInS ? this.volunteeringService.volunteerCodeInS : null, Validators.required),
-// //     poorManCode: new FormControl<number | null>(this.volunteeringService.poorManCodeInS ? this.volunteeringService.poorManCodeInS : null, Validators.required),
-// //     matcherCode: new FormControl<number | null>(this.volunteeringService.matcherCodeInS ? this.volunteeringService.matcherCodeInS : null, Validators.required),
-// //     projectCode: new FormControl<number | null>(this.volunteeringService.projectCodeInS ? this.volunteeringService.projectCodeInS : null),
-// //     subProjectCode: new FormControl<number | null>(this.volunteeringService.subProjectCodeInS ? this.volunteeringService.subProjectCodeInS : null)
-
-// //   });
-// //   async ngOnInit() {
-// //     const today = new Date();
-
-// //     const formatted =
-// //       today.getFullYear() +
-// //       '-' +
-// //       String(today.getMonth() + 1).padStart(2, '0') +
-// //       '-' +
-// //       String(today.getDate()).padStart(2, '0');
-
-// //     this.vlntrFrm.patchValue({
-// //       dateOfVolunteering: formatted,
-// //       volunteerCode: this.volunteeringService.volunteerCodeInS ,
-// //       poorManCode: this.volunteeringService.poorManCodeInS ,
-// //       matcherCode: this.volunteeringService.matcherCodeInS ,
-// //       projectCode: this.volunteeringService.projectCodeInS ,
-// //       subProjectCode: this.volunteeringService.subProjectCodeInS 
-// //     });
-// //     this.filteredSubProjects =  this.subProjectService.Projects.filter(subPro => subPro.projectCode === Number(this.volunteeringService.projectCodeInS))
-
-// //     await this.volunteerService.getAllVolunteers().subscribe(res => { this.volunteerService.volunteers = res });
-// //     await this.projectService.getAllProjects().subscribe(res => { this.projectsArr = res; this.projectService.projects = res });
-// //     await this.subProjectService.getAllProjects().subscribe(res => { this.subProjects = res; this.subProjectService.Projects = res });
-// //     await this.ecdService.getAllEichud().subscribe(res => { this.ecdService.peopleInTheEichud = res });  
-
-// //   }
-
-
-
-// //   onProjectChange(event: Event) {
-// //     const selectedProjectCode = (event.target as HTMLSelectElement).value;
-// //     this.filteredSubProjects = this.subProjects.filter(subPro => subPro.projectCode === Number(selectedProjectCode));
-// //   }
-// //   // getVolunteerName(volunteerCode: number | undefined): string {
-// //   //   // alert(volunteerCode)
-// //   //   if (volunteerCode === undefined) {
-// //   //   return 'שם לא נמצא';
-// //   //   }
-// //   //   const volunteer = this.eichudPeople.find(v => v.eichudCode === volunteerCode);
-// //   //   // alert( volunteer)
-// //   //   return volunteer ? (volunteer.familyName+" "+volunteer.firstName) : 'שם לא נמצא';
-// //   // }
-
-// //   async ngOnInit(){
-// //     await this.getVolunteering()// this.volunteeringArr = await  lastValueFrom(this.volunteerService.getAllVolunteers());
-// //     this.projectsArr = await  lastValueFrom(this.projectService.getAllProjects());
-// //     this.subProjects = await  lastValueFrom(this.subProjectService.getAllProjects());
-// //     this.volunteerArr = await  lastValueFrom(this.volunteerService.getAllVolunteers());
-// //     // this.eichudPeople = await  lastValueFrom(this.eichudService.getAllEichud());
-// //     this.volunteerService.refreshData();
-// //    this.ecdService.refreshData();
-  
-// //     //  alert(this.subProjects.length)
-// //   }
-
-
-// //   vlntrFrm = new FormGroup({
-// //     // volunteeringCode: new FormControl<number | null>(null, Validators.required),
-// //     dateOfVolunteering: new FormControl<Date | null>(null, Validators.required),
-// //     volunteerCode: new FormControl<number | null>(null),
-// //     poorManCode: new FormControl<number | null>(null),
-// //     matcherCode: new FormControl<number | null>(null),
-// //     projectCode: new FormControl<number | null>(null),
-// //     subProjectCode: new FormControl<number | null>(null)
-
-// //   });
-
-// //   addVolunteering() {
-// //     if (this.vlntrFrm.valid) {
-// //       const volunteering = {
-
-
-// //         dateOfVolunteering: this.vlntrFrm.value.dateOfVolunteering!,
-// //         volunteerCode: this.vlntrFrm.value.volunteerCode!,
-// //         poorManCode: this.vlntrFrm.value.poorManCode!,
-// //         matcherCode: this.vlntrFrm.value.matcherCode!,
-// //         projectCode: this.vlntrFrm.value.projectCode!,
-// //         subProjectCode: this.vlntrFrm.value.subProjectCode!
-// //       }
-// //       this.volunteeringService.addVolunteering(volunteering);
-// //       alert(volunteering)
-// //     }
-// //   }
-// //   deleteVolunteering(v: VolunteeringModule) {
-// //     this.volunteeringService.addVolunteering(v);
-
-// //   }
-// //   updateVolunteering(v: VolunteeringModule) {
-// //     this.volunteeringService.updateVolunteering(v);
-
-// //   }
-// //   getVolunteering() {
-// //     this.volunteeringService.getAllVolunteerings().subscribe(res => { this.volunteeringArr = res })
-
-// //   }
-
-// //   // getVolunteeringById(v: VolunteeringModule) {
-// //   //   this.volunteeringService.getVolunteeringById(v.volunteeringCode)
-// //   // }
-
-
-// // }
-import { VolunteeringService } from '../../Services/volunteering-service';
-import { EichudModel } from '../../Models/EichudModel';
-
-import { AsyncPipe, CommonModule, DatePipe } from '@angular/common';
+import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { VolunteerModel } from '../../Models/volunteer/volunteer-module';
-import { VolunteerService } from '../../Services/volunteer-service';
-import { EichudService } from '../../Services/eichud-service';
-import { DataView } from 'primeng/dataview';
-import { DatePicker, DatePickerModule } from 'primeng/datepicker';
-import { ProjectService } from '../../Services/project-service';
-import { ProjectModule } from '../../Models/project/project-module';
-import { SubProjectService } from '../../Services/sub-project-service';
-import { SubProjectModule } from '../../Models/sub-project/sub-project-module';
-import { lastValueFrom } from 'rxjs';
-import { AsyncAction } from 'rxjs/internal/scheduler/AsyncAction';
-import { Component, inject } from '@angular/core';
-import { VolunteeringModule } from '../../Models/volunteering/volunteering/volunteering-module';
-import { NO_ERRORS_SCHEMA, SECURITY_SCHEMA } from '@angular/compiler';
+import { ActivatedRoute } from '@angular/router';
+import { forkJoin } from 'rxjs';
+import { ProjectApiService } from '../../core/api/project-api.service';
+import { SubProjectApiService } from '../../core/api/sub-project-api.service';
+import { VolunteerApiService } from '../../core/api/volunteer-api.service';
+import { VolunteeringApiService } from '../../core/api/volunteering-api.service';
+import { SessionService } from '../../core/auth/session.service';
+import { NotificationService } from '../../core/notifications/notification.service';
+import { Project } from '../../models/project.model';
+import { SubProject } from '../../models/sub-project.model';
+import { CreateVolunteering } from '../../models/volunteering.model';
+import { PersonOption, toPersonOption } from '../../shared/person-picker/person-option';
+import { PersonPicker } from '../../shared/person-picker/person-picker';
+import { PersonSearchService } from '../../shared/person-picker/person-search.service';
+import { LoadState } from '../../shared/loading/load-state';
+
+/** Query parameters that other pages (volunteer list, sub-projects) use to pre-fill this form. */
+interface VolunteeringFormParams {
+  volunteerCode?: number;
+  projectCode?: number;
+  subProjectCode?: number;
+}
 
 @Component({
   selector: 'app-volunteering',
-  imports: [AsyncPipe, ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, PersonPicker],
   templateUrl: './volunteering.html',
   styleUrl: './volunteering.scss'
 })
-export class Volunteering {
-  projectService = inject(ProjectService)
-  projectsArr: ProjectModule[] = [];
-  subProjectService = inject(SubProjectService)
-  subProjects: SubProjectModule[] = [];
-  filteredSubProjects: SubProjectModule[] = []; // מאגר ה-subProjects המותאם לפי projectCode
-  // poorManService = inject(EichudService)
-  volunteeringArr: VolunteeringModule[] = [];
-  volunteerArr: VolunteerModel[] = []//מערך מתנדבים
-  volunteeringService = inject(VolunteeringService)
-  volunteerService = inject(VolunteerService)
-  ecdService = inject(EichudService)
+export class Volunteering implements OnInit {
+  private readonly route = inject(ActivatedRoute);
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly session = inject(SessionService);
+  private readonly notifications = inject(NotificationService);
+  private readonly volunteeringApi = inject(VolunteeringApiService);
+  private readonly volunteerApi = inject(VolunteerApiService);
+  private readonly projectApi = inject(ProjectApiService);
+  private readonly subProjectApi = inject(SubProjectApiService);
+  private readonly personSearch = inject(PersonSearchService);
+
+  readonly projects = signal<Project[]>([]);
+  readonly filteredSubProjects = signal<SubProject[]>([]);
+  readonly listsState = signal<LoadState>('loading');
+  readonly selectedVolunteer = signal<PersonOption | null>(null);
+  readonly selectedMatcher = signal<PersonOption | null>(null);
+  private subProjects: SubProject[] = [];
 
   vlntrFrm = new FormGroup({
     dateOfVolunteering: new FormControl<string | null>(null, Validators.required),
-
-    volunteerCode: new FormControl<number | null>(this.volunteeringService.volunteerCodeInS ? this.volunteeringService.volunteerCodeInS : null, Validators.required),
-    poorManCode: new FormControl<number | null>(this.volunteeringService.poorManCodeInS ? this.volunteeringService.poorManCodeInS : null, Validators.required),
-    matcherCode: new FormControl<number | null>(this.volunteeringService.matcherCodeInS ? this.volunteeringService.matcherCodeInS : null, Validators.required),
-    projectCode: new FormControl<number | null>(this.volunteeringService.projectCodeInS ? this.volunteeringService.projectCodeInS : null),
-    subProjectCode: new FormControl<number | null>(this.volunteeringService.subProjectCodeInS ? this.volunteeringService.subProjectCodeInS : null)
-
+    volunteerCode: new FormControl<number | null>(null, Validators.required),
+    poorManCode: new FormControl<number | null>(null, Validators.required),
+    matcherCode: new FormControl<number | null>(null, Validators.required),
+    projectCode: new FormControl<number | null>(null),
+    subProjectCode: new FormControl<number | null>(null)
   });
-  async ngOnInit() {
-    const today = new Date();
 
-    const formatted =
-      today.getFullYear() +
-      '-' +
-      String(today.getMonth() + 1).padStart(2, '0') +
-      '-' +
-      String(today.getDate()).padStart(2, '0');
+  /** Volunteer and matcher are both Volunteers; the poor man is an Eichud person. */
+  readonly searchVolunteers = this.personSearch.searchVolunteers;
+  readonly searchPoorMen = (text: string) => this.personSearch.searchEichud(text);
 
+  ngOnInit() {
+    const params = readFormParams(this.route.snapshot.queryParamMap);
     this.vlntrFrm.patchValue({
-      dateOfVolunteering: formatted,
-      volunteerCode: this.volunteeringService.volunteerCodeInS ,
-      poorManCode: this.volunteeringService.poorManCodeInS ,
-      matcherCode: this.volunteeringService.matcherCodeInS ,
-      projectCode: this.volunteeringService.projectCodeInS ,
-      subProjectCode: this.volunteeringService.subProjectCodeInS 
+      dateOfVolunteering: todayAsDateInput(),
+      volunteerCode: params.volunteerCode ?? null,
+      matcherCode: this.session.currentUser()?.volunteerCode ?? null,
+      projectCode: params.projectCode ?? null,
+      subProjectCode: params.subProjectCode ?? null,
     });
 
-    await lastValueFrom(this.volunteerService.getAllVolunteers()).then(res => { this.volunteerService.volunteers = res });
-    await lastValueFrom(this.projectService.getAllProjects()).then(res => { this.projectsArr = res; this.projectService.projects = res });
-    await this.volunteeringService.refreshData();
-    await lastValueFrom(this.subProjectService.getAllProjects()).then(res => { this.subProjects = res; this.subProjectService.Projects = res });
-    await lastValueFrom(this.ecdService.getAllEichud()).then(res => { this.ecdService.peopleInTheEichud = res });  
-    await lastValueFrom(this.volunteeringService.getAllVolunteerings()).then(res => { this.volunteeringService.volunteerings = res ; this.volunteeringArr = res });  
-    this.filteredSubProjects = await  this.subProjectService.Projects.filter(subPro => subPro.projectCode === Number(this.volunteeringService.projectCodeInS))
+    const currentUser = this.session.currentUser();
+    if (currentUser) {
+      this.selectedMatcher.set(
+        toPersonOption(currentUser.volunteerCode, currentUser.familyName, currentUser.firstName),
+      );
+    }
+    if (params.volunteerCode !== undefined) {
+      this.showPreselectedVolunteer(params.volunteerCode);
+    }
 
+    this.vlntrFrm.controls.projectCode.valueChanges
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((projectCode) => this.filterSubProjects(projectCode));
+
+    forkJoin({ projects: this.projectApi.getAll(), subProjects: this.subProjectApi.getAll() })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: ({ projects, subProjects }) => {
+          this.projects.set(projects);
+          this.subProjects = subProjects;
+          this.filterSubProjects(this.vlntrFrm.controls.projectCode.value);
+          this.listsState.set('ready');
+        },
+        // The error interceptor already showed the message; the form shows the error state.
+        error: () => this.listsState.set('error'),
+      });
   }
 
-
-
-  onProjectChange(event: Event) {
-    const selectedProjectCode = (event.target as HTMLSelectElement).value;
-    this.filteredSubProjects = this.subProjectService.Projects.filter(subPro => subPro.projectCode === Number(selectedProjectCode));
-  }
- 
   addVolunteering() {
-    if (this.vlntrFrm.valid) {
-      const volunteering = {
-        dateOfVolunteering: this.vlntrFrm.value.dateOfVolunteering!,
-        volunteerCode: this.vlntrFrm.value.volunteerCode!,
-        poorManCode: this.vlntrFrm.value.poorManCode!,
-        matcherCode: this.vlntrFrm.value.matcherCode!,
-        projectCode: this.vlntrFrm.value.projectCode!,
-        subProjectCode: this.vlntrFrm.value.subProjectCode!
-      }
-      this.volunteeringService.addVolunteering(volunteering);
-      alert(this.volunteeringArr.length)
-      this.vlntrFrm.reset(); // איפוס הטופס לאחר הוספה
+    const form = this.vlntrFrm.getRawValue();
+    if (this.vlntrFrm.invalid || !form.dateOfVolunteering) {
+      return;
+    }
+    const volunteering: CreateVolunteering = { ...form, dateOfVolunteering: form.dateOfVolunteering };
+    this.volunteeringApi
+      .create(volunteering)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.notifications.success('ההתנדבות נשמרה');
+        // Reset only after the server accepted it, so a failed save keeps what the user typed.
+        this.vlntrFrm.reset();
+      });
+  }
+
+  private showPreselectedVolunteer(volunteerCode: number) {
+    this.volunteerApi
+      .getById(volunteerCode)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((volunteer) =>
+        this.selectedVolunteer.set(
+          toPersonOption(volunteer.volunteerCode, volunteer.familyName, volunteer.firstName),
+        ),
+      );
+  }
+
+  /** Shows the chosen project's sub-projects and drops a chosen sub-project of another project. */
+  private filterSubProjects(projectCode: number | null) {
+    const subProjects = this.subProjects.filter((sub) => sub.projectCode === projectCode);
+    this.filteredSubProjects.set(subProjects);
+
+    const subProjectControl = this.vlntrFrm.controls.subProjectCode;
+    const chosen = subProjectControl.value;
+    if (chosen !== null && !subProjects.some((sub) => sub.subProjectCode === chosen)) {
+      subProjectControl.setValue(null);
     }
   }
-  deleteVolunteering(v: VolunteeringModule) {
-    this.volunteeringService.addVolunteering(v);
-
-  }
-  updateVolunteering(v: VolunteeringModule) {
-    this.volunteeringService.updateVolunteering(v);
-
-  }
-  getVolunteering() {
-    this.volunteeringService.getAllVolunteerings().subscribe(res => { this.volunteeringArr = res })
-
-  }
-
 }
 
+function readFormParams(query: { get(name: string): string | null }): VolunteeringFormParams {
+  return {
+    volunteerCode: toOptionalNumber(query.get('volunteerCode')),
+    projectCode: toOptionalNumber(query.get('projectCode')),
+    subProjectCode: toOptionalNumber(query.get('subProjectCode')),
+  };
+}
 
+function toOptionalNumber(text: string | null): number | undefined {
+  const value = Number(text);
+  return text !== null && Number.isInteger(value) ? value : undefined;
+}
 
-
-
+/** Today in the yyyy-MM-dd format a date input expects. */
+function todayAsDateInput(): string {
+  const today = new Date();
+  return [
+    today.getFullYear(),
+    String(today.getMonth() + 1).padStart(2, '0'),
+    String(today.getDate()).padStart(2, '0'),
+  ].join('-');
+}

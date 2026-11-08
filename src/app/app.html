@@ -1,36 +1,3 @@
-<!-- <div class="app-shell">
-
-  <header class="app-header">
-
-    <nav class="nav">
-
-      @if(volunteerSrv.isVolunteerLoggedIn) {
-
-        <a routerLink="home" routerLinkActive="active-link">דף הבית</a>
-        <a routerLink="v" routerLinkActive="active-link">להוספת התנדבות</a>
-        <a routerLink="volunteer" routerLinkActive="active-link">להוספת מתנדב</a>
-        <a routerLink="domain" routerLinkActive="active-link">פרויקטים</a>
-        <a routerLink="eichud" routerLinkActive="active-link">אנשי איחוד</a>
-        <a routerLink="position" routerLinkActive="active-link">תפקידים</a>
-        <a routerLink="data" routerLinkActive="active-link">פילוח נתונים</a>
-        <a routerLink="login" routerLinkActive="active-link">כניסה</a>
-
-      } @else {
-
-        <a routerLink="data" routerLinkActive="active-link">פילוח נתונים</a>
-        <a routerLink="login" routerLinkActive="active-link">כניסה</a>
-
-      }
-
-    </nav>
-
-  </header>
-
-  <main class="app-container">
-    <router-outlet></router-outlet>
-  </main>
-
-</div> -->
 <div class="app-shell">
 
   <!-- SIDEBAR -->
@@ -46,7 +13,7 @@
 
     <nav class="nav">
 
-      @if(volunteerSrv.isVolunteerLoggedIn) {
+      @if(session.isVolunteerLoggedIn()) {
 
       <a routerLink="home" routerLinkActive="active-link">
   <span class="material-icons">home</span>

@@ -5,6 +5,7 @@ import { routes } from './app.routes';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 import { httpLoggingInterceptor } from './core/http.interceptor';
+import { errorNotificationInterceptor } from './core/http/error.interceptor';
 
 
 export const appConfig: ApplicationConfig = {
@@ -12,7 +13,7 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
-    provideHttpClient(withInterceptors([httpLoggingInterceptor])),
+    provideHttpClient(withInterceptors([httpLoggingInterceptor, errorNotificationInterceptor])),
      provideAnimations(),
   provideCharts(withDefaultRegisterables())
 
