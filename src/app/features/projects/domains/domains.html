@@ -1,0 +1,31 @@
+<div class="domains-container">
+
+  <label class="title">תחום הפרויקט</label>
+
+  <div class="projects-list">
+    @if (loadState() === 'loading') {
+      <app-loading></app-loading>
+    } @else if (loadState() === 'error') {
+      <app-error-state message="שגיאה בטעינת התחומים" (retry)="load()"></app-error-state>
+    } @else {
+      @for(p of departments(); track p.projectCode){
+        <a
+          class="project-link"
+          [routerLink]="['sub', p.projectCode , p.projectName]">
+          {{p.projectName}}
+        </a>
+      } @empty {
+        <app-empty-state message="אין תחומים"></app-empty-state>
+      }
+    }
+  </div>
+
+  <a
+    class="add-btn"
+    routerLink="project"
+    routerLinkActive="active-link">
+    להוספת תחום
+  </a>
+
+  <router-outlet></router-outlet>
+</div>

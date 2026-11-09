@@ -1,216 +1,3 @@
-// /* =========================
-//    GLOBAL RESET
-// ========================= */
-// * {
-//   box-sizing: border-box;
-// }
-
-// html, body {
-//   margin: 0;
-//   padding: 0;
-//   height: 100%;
-//   overflow-x: hidden;
-//   font-family: Arial, sans-serif;
-//   direction: rtl;
-//   background: #e6f4ff;
-// }
-
-// /* =========================
-//    APP LAYOUT (יותר מרווח כללי)
-// ========================= */
-// .app-shell {
-//   display: flex;
-//   min-height: 100vh;
-//   width: 100%;
-
-//   /* הרחבה למסכים גדולים */
-//   max-width: 1800px;
-//   margin: 0 auto;
-// }
-
-// /* =========================
-//    SIDEBAR (רק הרחבה קלה)
-// ========================= */
-// .sidebar {
-//   width: 260px;   /* היה 240 */
-//   min-height: 100vh;
-
-//   background: #ffffff;
-//   border-left: 1px solid #d7e8f5;
-
-//   display: flex;
-//   flex-direction: column;
-
-//   padding: 14px;
-
-//   position: sticky;
-//   top: 0;
-
-//   transition: width 0.3s ease, transform 0.3s ease;
-
-//   box-shadow: -2px 0 18px rgba(0, 0, 0, 0.06);
-//   z-index: 10;
-// }
-
-// /* collapsed */
-// .sidebar.collapsed {
-//   width: 80px; /* טיפה יותר נוח */
-// }
-
-// /* logo */
-// .logo {
-//   font-weight: 700;
-//   font-size: 15px;
-
-//   color: #1f3b57;
-
-//   margin-bottom: 14px;
-//   text-align: center;
-// }
-
-// /* toggle button */
-// .toggle-btn {
-//   border: 1px solid #cfd8dc;
-//   background: #f5f9ff;
-
-//   padding: 7px;
-
-//   border-radius: 8px;
-
-//   cursor: pointer;
-
-//   margin-bottom: 12px;
-
-//   transition: 0.2s ease;
-// }
-
-// /* nav */
-// .sidebar .nav {
-//   display: flex;
-//   flex-direction: column;
-//   gap: 8px;
-// }
-
-// /* links */
-// .sidebar a {
-//   display: block;
-
-//   padding: 12px 14px;
-
-//   border-radius: 10px;
-
-//   text-decoration: none;
-
-//   color: #2c3e50;
-
-//   font-size: 14.5px;
-
-//   transition: 0.25s ease;
-
-//   white-space: nowrap;
-//   overflow: hidden;
-//   text-overflow: ellipsis;
-// }
-
-// .sidebar a:hover {
-//   background: #f0f7ff;
-//   transform: translateX(-2px);
-// }
-
-// /* active */
-// .active-link {
-//   background: #90caf9 !important;
-//   color: #0d47a1 !important;
-//   font-weight: 600;
-// }
-
-// /* =========================
-//    MAIN
-// ========================= */
-// .main {
-//   flex: 1;
-//   display: flex;
-//   flex-direction: column;
-
-//   min-width: 0;
-// }
-
-// /* topbar (יותר גבוה = יותר “מערכתי”) */
-// .topbar {
-//   height: 62px;
-
-//   display: flex;
-//   align-items: center;
-
-//   padding: 0 22px;
-
-//   background: #ffffff;
-
-//   border-bottom: 1px solid #d7e8f5;
-
-//   font-weight: 600;
-//   font-size: 16px;
-
-//   color: #1f3b57;
-
-//   position: sticky;
-//   top: 0;
-//   z-index: 5;
-// }
-
-// /* =========================
-//    CONTENT (החלק הכי חשוב – הרחבה)
-// ========================= */
-// .content {
-//   flex: 1;
-
-//   padding: 28px; /* יותר מרווח */
-
-//   background: linear-gradient(135deg, #e6f4ff, #d9efff);
-
-//   display: flex;
-//   flex-direction: column;
-//   align-items: center;
-
-//   gap: 18px;
-
-//   min-width: 0;
-// }
-
-// /* אזור מרכזי רחב יותר */
-// .content > * {
-//   width: 100%;
-//   max-width: 1500px; /* הרחבה אמיתית */
-// }
-
-// /* =========================
-//    RESPONSIVE FIX
-// ========================= */
-// @media (max-width: 900px) {
-//   .sidebar {
-//     position: fixed;
-//     right: 0;
-//     height: 100%;
-//     z-index: 999;
-//   }
-
-//   .main {
-//     margin-right: 0;
-//   }
-// }
-
-// /* =========================
-//    ULTRA WIDE SCREENS
-// ========================= */
-// @media (min-width: 1600px) {
-//   .content > * {
-//     max-width: 1700px;
-//   }
-
-//   .sidebar {
-//     width: 280px;
-//   }
-// }
 /* =========================
    GLOBAL
 ========================= */
@@ -236,7 +23,6 @@ html, body {
   min-height: 100vh;
   width: 100%;
 
-  /* מרכז מערכת אמיתי */
   max-width: 1800px;
   margin: 0 auto;
 
@@ -332,7 +118,6 @@ html, body {
   text-overflow: ellipsis;
 }
 
-/* hover effect “מערכתי” */
 .sidebar a:hover {
   background: #f0f7ff;
   transform: translateX(-3px);
@@ -400,7 +185,6 @@ html, body {
   min-width: 0;
 }
 
-/* מרכז תוכן אמיתי */
 .content > * {
   width: 100%;
   max-width: 1500px;

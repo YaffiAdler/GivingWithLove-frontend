@@ -1,0 +1,21 @@
+.page-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 16px;
+  text-align: center;
+}
+
+.page-state-error {
+  color: #c62828;
+}
+
+.page-state-retry {
+  padding: 4px 14px;
+  border: 1px solid currentColor;
+  border-radius: 8px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}

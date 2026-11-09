@@ -1,0 +1,156 @@
+:host {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  background: rgba(7, 26, 34, 0.9);
+  min-height: 100vh;
+  padding: 30px;
+  font-family: Arial, sans-serif;
+  color: #e0f7fa;
+}
+
+.volunteer-details {
+  width: 100%;
+  max-width: 950px;
+  max-height: 80vh;
+  overflow-y: auto;
+  background: #0f2a38;
+  border: 1px solid #00bcd4;
+  border-radius: 18px;
+  padding: 25px;
+  box-shadow: 0 12px 30px rgba(0, 229, 255, 0.15);
+  position: relative;
+}
+
+h1 {
+  text-align: center;
+  color: #00e5ff;
+  margin-bottom: 25px;
+  font-size: 32px;
+}
+
+.volunteer-name {
+  text-align: center;
+  color: #e0f7fa;
+  margin: 0 0 20px;
+  font-size: 24px;
+}
+
+button[mat-icon-button] {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  background: transparent;
+  color: #00e5ff;
+  transition: 0.3s;
+}
+
+button[mat-icon-button]:hover {
+  transform: scale(1.1);
+  color: #ffffff;
+}
+
+.volunteer-info {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.volunteer-info p {
+  background: #071a22;
+  border: 1px solid #00bcd4;
+  border-radius: 12px;
+  padding: 14px;
+  margin: 0;
+  color: #e0f7fa;
+  transition: 0.3s;
+}
+
+.volunteer-info p:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 18px rgba(0, 229, 255, 0.18);
+}
+
+.volunteer-info strong {
+  color: #00e5ff;
+}
+
+h3 {
+  color: #00e5ff;
+  margin-top: 35px;
+  margin-bottom: 15px;
+  font-size: 22px;
+  border-bottom: 1px solid rgba(0, 229, 255, 0.3);
+  padding-bottom: 8px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  overflow: hidden;
+  border-radius: 14px;
+  background: #071a22;
+}
+
+.table thead {
+  background: #00bcd4;
+}
+
+.table th,
+.table td {
+  border: 1px solid #ccc;
+}
+
+// The table is short (date, project, sub-project), so its cells are centered on purpose.
+.table thead th {
+  color: #002a33;
+  padding: 14px;
+  text-align: center;
+  font-size: 15px;
+}
+
+.table tbody tr {
+  border-bottom: 1px solid rgba(0, 229, 255, 0.15);
+  transition: 0.3s;
+}
+
+.table tbody tr:hover {
+  background: rgba(0, 229, 255, 0.08);
+}
+
+.table tbody td {
+  padding: 12px;
+  text-align: center;
+  color: #e0f7fa;
+}
+
+.chart-container {
+  position: relative;
+  height: 420px;
+  background: #071a22;
+  border: 1px solid #00bcd4;
+  border-radius: 16px;
+  padding: 20px;
+  margin-top: 15px;
+  box-shadow: 0 8px 20px rgba(0, 229, 255, 0.12);
+}
+
+@media (max-width: 768px) {
+  .volunteer-details {
+    padding: 18px;
+  }
+
+  h1 {
+    font-size: 26px;
+  }
+
+  h3 {
+    font-size: 20px;
+  }
+
+  .chart-container {
+    height: 340px;
+  }
+}

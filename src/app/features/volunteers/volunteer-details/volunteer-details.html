@@ -1,0 +1,61 @@
+<h1>פרטי מתנדב</h1>
+<div class="volunteer-details">
+  <button mat-icon-button (click)="close()" style="float: right;">
+    <mat-icon>close</mat-icon>
+  </button>
+
+  @if (loadState() === 'loading') {
+    <app-loading></app-loading>
+  } @else if (loadState() === 'error') {
+    <app-error-state message="שגיאה בטעינת פרטי המתנדב" (retry)="load()"></app-error-state>
+  } @else if (volunteer(); as volunteer) {
+    <h2 class="volunteer-name">{{ volunteer | personName }}</h2>
+    <div class="volunteer-info">
+      <p><strong>קוד מתנדב:</strong> {{volunteer.volunteerCode}}</p>
+      <p><strong>תפקיד:</strong> {{ volunteer.positionName | orDash }}</p>
+      <p><strong>שם האב:</strong> {{ volunteer.fathersName | orDash }}</p>
+      <p><strong>שטיבל:</strong> {{ volunteer.shtibel | orDash }}</p>
+      <p><strong>רחוב:</strong> {{ volunteer.street | orDash }}</p>
+      <p><strong>מספר בניין:</strong> {{ volunteer.house | orDash }}</p>
+      <p><strong>עיר:</strong> {{ volunteer.city | orDash }}</p>
+      <p><strong>מיקוד:</strong> {{ volunteer.zipCode | orDash }}</p>
+      <p><strong>טלפון בית:</strong> {{ volunteer.housePhone | orDash }}</p>
+      <p><strong>פלאפון:</strong> {{ volunteer.cellPhone | orDash }}</p>
+      <p><strong>שם החותן:</strong> {{ volunteer.shver | orDash }}</p>
+    </div>
+
+    <h3>התנדבויות אחרונות</h3>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>תאריך</th>
+          <th>פרויקט</th>
+          <th>תת-פרויקט</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (v of volunteerings(); track v.volunteeringCode) {
+          <tr>
+            <td>{{ v.dateOfVolunteering | date:'dd/MM/yyyy' }}</td>
+            <td>{{ v.projectName | orDash }}</td>
+            <td>{{ v.subProjectName | orDash }}</td>
+          </tr>
+        } @empty {
+          <tr><td colspan="3"><app-empty-state message="אין התנדבויות"></app-empty-state></td></tr>
+        }
+      </tbody>
+    </table>
+
+    @if (volunteerings().length) {
+      <h3>פילוח לפי פרויקטים — {{ recentCount }} ההתנדבויות האחרונות</h3>
+      <div class="chart-container">
+        <canvas baseChart type="pie" [data]="projectsChart()" [options]="pieOptions"></canvas>
+      </div>
+
+      <h3>גרף פעילות חודשי — {{ recentCount }} ההתנדבויות האחרונות</h3>
+      <div class="chart-container">
+        <canvas baseChart type="bar" [data]="monthsChart()" [options]="barOptions"></canvas>
+      </div>
+    }
+  }
+</div>

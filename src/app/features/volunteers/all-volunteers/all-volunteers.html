@@ -1,0 +1,113 @@
+<div class="page">
+
+  <div class="header">
+    <div class="title">רשימת מתנדבים</div>
+
+    @if (isD) {
+      <button class="close-btn"
+              mat-icon-button>
+        <mat-icon>close</mat-icon>
+      </button>
+    }
+  </div>
+
+  <div class="search-box">
+    <input type="text"
+           class="input"
+           [formControl]="volunteers.searchControl"
+           placeholder="חפש מתנדב...">
+  </div>
+
+  <div class="table-wrapper">
+
+    <table class="donors-table" matSort matSortActive="name" matSortDirection="asc"
+           (matSortChange)="changeSort($event)">
+
+      <thead>
+        <tr>
+          <th mat-sort-header="code">קוד איחוד</th>
+          <th mat-sort-header="name">שם</th>
+          <th>תפקיד</th>
+          <th>שם האב</th>
+          <th>שטיבל</th>
+          <th>רחוב</th>
+          <th>מספר בניין</th>
+          <th>עיר</th>
+          <th>מיקוד</th>
+          <th>טלפון בית</th>
+          <th>פלאפון</th>
+          <th>שם החותן</th>
+          <th>התנדבות</th>
+          <th>פרטים</th>
+          <th>השהיה</th>
+          <th>לעריכת פרטי מתנדב או הוספת תחומי התנדבות</th>
+
+
+        </tr>
+      </thead>
+
+      <tbody>
+        @if (volunteers.loading()) {
+          <tr><td colspan="16"><app-loading></app-loading></td></tr>
+        } @else if (volunteers.failed()) {
+          <tr><td colspan="16"><app-error-state message="שגיאה בטעינת המתנדבים" (retry)="volunteers.reload()"></app-error-state></td></tr>
+        } @else {
+        @for (d of volunteers.items(); track d.volunteerCode) {
+        <tr>
+
+          <td>{{d.volunteerCode}}</td>
+
+          <td>{{ d | personName | orDash }}</td>
+
+          <td>{{ d.positionName | orDash }}</td>
+          <td>{{ d.fathersName | orDash }}</td>
+          <td>{{ d.shtibel | orDash }}</td>
+          <td>{{ d.street | orDash }}</td>
+          <td>{{ d.house | orDash }}</td>
+          <td>{{ d.city | orDash }}</td>
+          <td>{{ d.zipCode | orDash }}</td>
+          <td>{{ d.housePhone | orDash }}</td>
+          <td>{{ d.cellPhone | orDash }}</td>
+          <td>{{ d.shver | orDash }}</td>
+
+          <td>
+            <button class="btn small" (click)="goToVolunteering(d)">
+              הוספת התנדבות
+            </button>
+          </td>
+
+          <td>
+            <button class="btn small secondary"
+                    (click)="goToVolunteerDetails(d)">
+              פרטים
+            </button>
+          </td>
+
+          <td>
+            <button type="button" class="btn small danger" disabled title="בקרוב">
+              השהיה
+            </button>
+          </td>
+            <td>
+                <button class="btn small danger" (click)="goToEditVolunteer(d)">לעריכת פרטי מתנדב או הוספת תחומי התנדבות</button>
+            </td>
+
+        </tr>
+        } @empty {
+          <tr><td colspan="16"><app-empty-state message="לא נמצאו מתנדבים"></app-empty-state></td></tr>
+        }
+        }
+      </tbody>
+
+    </table>
+
+    <mat-paginator [length]="volunteers.totalCount()" [pageIndex]="volunteers.pageIndex()"
+                   [pageSize]="volunteers.pageSize()" [pageSizeOptions]="volunteers.pageSizeOptions"
+                   (page)="volunteers.changePage($event)">
+    </mat-paginator>
+
+  </div>
+
+  <router-outlet></router-outlet>
+
+</div>

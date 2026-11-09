@@ -1,0 +1,26 @@
+@if (loadState() === 'loading') {
+  <app-loading></app-loading>
+} @else if (loadState() === 'error') {
+  <app-error-state message="שגיאה בטעינת תתי הפרויקטים" (retry)="retry()"></app-error-state>
+} @else if (subProjects().length) {
+
+  <div class="section-title">תתי פרויקטים</div>
+
+  @for(p of subProjects(); track p.subProjectCode) {
+    <div class="project">
+      <div>{{ p.subProjectName }}</div>
+    </div>
+  }
+
+} @else {
+  <app-empty-state message="אין תתי פרויקטים"></app-empty-state>
+}
+
+<!-- TODO(FE-04): replace with stats API -->
+<div class="cards-container">
+
+  <div class="card">
+    <h2>נתוני הסטטיסטיקה יוצגו כאן בקרוב</h2>
+  </div>
+
+</div>
