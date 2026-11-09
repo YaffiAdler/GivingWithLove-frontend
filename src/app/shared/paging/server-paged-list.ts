@@ -3,16 +3,24 @@ import { takeUntilDestroyed, toObservable, toSignal } from '@angular/core/rxjs-i
 import { FormControl } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { catchError, debounceTime, distinctUntilChanged, map, Observable, of, switchMap, tap } from 'rxjs';
-import { PagedResult } from '../../models/paged-result.model';
+import { PagedResult, SortDirection } from '../../models/paged-result.model';
 import { SEARCH_DEBOUNCE_MS } from './search-debounce';
 
 export const DEFAULT_PAGE_SIZE = 25;
 export const PAGE_SIZE_OPTIONS = [10, 25, 50, 100];
 
+/** A sort chosen in the table header: a column and a direction. */
+export interface ListSort<TSort extends string> {
+  active: TSort;
+  direction: SortDirection;
+}
+
+/** Without `sort` and `direction` the server applies its own default order. */
 export interface ServerPageQuery<TSort extends string> {
   page: number;
   pageSize: number;
-  sort: TSort;
+  sort?: TSort;
+  direction?: SortDirection;
   search: string;
 }
 
@@ -22,13 +30,13 @@ export interface ServerPageQuery<TSort extends string> {
  * Must be created in an injection context (a field initializer or constructor).
  */
 export function createServerPagedList<TItem, TSort extends string>(config: {
-  defaultSort: TSort;
+  initialSort: ListSort<TSort>;
   load: (query: ServerPageQuery<TSort>) => Observable<PagedResult<TItem>>;
 }) {
   const searchControl = new FormControl('', { nonNullable: true });
   const pageIndex = signal(0);
   const pageSize = signal(DEFAULT_PAGE_SIZE);
-  const sort = signal<TSort>(config.defaultSort);
+  const sort = signal<ListSort<TSort> | null>(config.initialSort);
   const search = signal('');
   const reloadCount = signal(0);
   const loading = signal(false);
@@ -49,7 +57,14 @@ export function createServerPagedList<TItem, TSort extends string>(config: {
   const query = computed<ServerPageQuery<TSort>>(() => {
     // Read only to re-run the query when reload() is called.
     reloadCount();
-    return { page: pageIndex() + 1, pageSize: pageSize(), sort: sort(), search: search() };
+    const currentSort = sort();
+    return {
+      page: pageIndex() + 1,
+      pageSize: pageSize(),
+      sort: currentSort?.active,
+      direction: currentSort?.direction,
+      search: search(),
+    };
   });
 
   const result = toSignal(
@@ -87,7 +102,8 @@ export function createServerPagedList<TItem, TSort extends string>(config: {
       pageSize.set(event.pageSize);
     },
 
-    changeSort(newSort: TSort): void {
+    /** `null` clears the sort, so the server's default order applies. */
+    changeSort(newSort: ListSort<TSort> | null): void {
       pageIndex.set(0);
       sort.set(newSort);
     },

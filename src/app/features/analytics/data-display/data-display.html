@@ -1,0 +1,52 @@
+<div class="page">
+
+  <div class="title">פעילות הארגון</div>
+
+  <!-- TODO(FE-04): replace with stats API -->
+  <div class="cards-container">
+    <div class="card">
+      <h2>נתוני הסטטיסטיקה יוצגו כאן בקרוב</h2>
+    </div>
+  </div>
+
+  <div class="projects-section">
+
+    <div class="section-title">פילוח לפי אגפים</div>
+
+    @if (loadState() === 'loading') {
+      <app-loading></app-loading>
+    } @else if (loadState() === 'error') {
+      <app-error-state message="שגיאה בטעינת האגפים" (retry)="load()"></app-error-state>
+    } @else {
+      @for(p of departments(); track p.projectCode) {
+
+        <div class="project">
+
+          <a [routerLink]="['/midData', p.projectCode]"
+             class="mid-project">
+            {{ p.projectName }}
+          </a>
+
+          @if(p.projects.length) {
+            <div class="sub-projects">
+
+              @for(q of p.projects; track q.projectCode) {
+                <a [routerLink]="['/deepDataDisplay', q.projectCode]"
+                   class="sub-project">
+                  {{ q.projectName }}
+                </a>
+              }
+
+            </div>
+          }
+
+        </div>
+
+      } @empty {
+        <app-empty-state message="אין אגפים"></app-empty-state>
+      }
+    }
+
+  </div>
+
+</div>

@@ -1,0 +1,49 @@
+.volunteer-domains-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  direction: rtl;
+  color: #060b18;
+}
+
+/* select */
+.form-control {
+  padding: 10px 12px;
+  border-radius: 12px;
+
+  background: rgba(255,255,255,0.04);
+  color: #0a4df5;
+
+  border: 1px solid rgba(120,180,255,0.2);
+
+  outline: none;
+  transition: 0.2s ease;
+}
+
+.form-control:focus {
+  border-color: #60a5fa;
+  box-shadow: 0 0 0 3px rgba(96,165,250,0.15);
+}
+
+button {
+  margin-top: 10px;
+  width: fit-content;
+
+  padding: 10px 14px;
+  border-radius: 12px;
+
+  border: none;
+  cursor: pointer;
+
+  background: linear-gradient(135deg, #4aa3ff, #8ad0ff);
+  color: #0a0f1a;
+
+  font-weight: 600;
+
+  transition: 0.2s ease;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 25px rgba(0,0,0,0.4);
+}

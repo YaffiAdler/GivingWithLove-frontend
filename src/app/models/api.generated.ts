@@ -18,6 +18,7 @@ export interface paths {
                     Page?: number;
                     PageSize?: number;
                     Sort?: string;
+                    Direction?: "asc" | "desc";
                 };
                 header?: never;
                 path?: never;
@@ -663,6 +664,240 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/stats/overview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: {
+                    From?: string;
+                    To?: string;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["OverviewStatsDto"];
+                        "application/json": components["schemas"]["OverviewStatsDto"];
+                        "text/json": components["schemas"]["OverviewStatsDto"];
+                    };
+                };
+                /** @description Bad Request */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["ProblemDetails"];
+                        "application/json": components["schemas"]["ProblemDetails"];
+                        "text/json": components["schemas"]["ProblemDetails"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/stats/volunteers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: {
+                    From?: string;
+                    To?: string;
+                    Page?: number;
+                    PageSize?: number;
+                    Sort?: string;
+                    Direction?: "asc" | "desc";
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["VolunteerRankingRowDtoPagedResult"];
+                        "application/json": components["schemas"]["VolunteerRankingRowDtoPagedResult"];
+                        "text/json": components["schemas"]["VolunteerRankingRowDtoPagedResult"];
+                    };
+                };
+                /** @description Bad Request */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["ProblemDetails"];
+                        "application/json": components["schemas"]["ProblemDetails"];
+                        "text/json": components["schemas"]["ProblemDetails"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/stats/volunteers/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: {
+                    From?: string;
+                    To?: string;
+                };
+                header?: never;
+                path: {
+                    id: number;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["VolunteerStatsDto"];
+                        "application/json": components["schemas"]["VolunteerStatsDto"];
+                        "text/json": components["schemas"]["VolunteerStatsDto"];
+                    };
+                };
+                /** @description Bad Request */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["ProblemDetails"];
+                        "application/json": components["schemas"]["ProblemDetails"];
+                        "text/json": components["schemas"]["ProblemDetails"];
+                    };
+                };
+                /** @description Not Found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["ProblemDetails"];
+                        "application/json": components["schemas"]["ProblemDetails"];
+                        "text/json": components["schemas"]["ProblemDetails"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/stats/projects/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: {
+                    From?: string;
+                    To?: string;
+                };
+                header?: never;
+                path: {
+                    id: number;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["ProjectStatsDto"];
+                        "application/json": components["schemas"]["ProjectStatsDto"];
+                        "text/json": components["schemas"]["ProjectStatsDto"];
+                    };
+                };
+                /** @description Bad Request */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["ProblemDetails"];
+                        "application/json": components["schemas"]["ProblemDetails"];
+                        "text/json": components["schemas"]["ProblemDetails"];
+                    };
+                };
+                /** @description Not Found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["ProblemDetails"];
+                        "application/json": components["schemas"]["ProblemDetails"];
+                        "text/json": components["schemas"]["ProblemDetails"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/SubProject": {
         parameters: {
             query?: never;
@@ -879,6 +1114,7 @@ export interface paths {
                     Page?: number;
                     PageSize?: number;
                     Sort?: string;
+                    Direction?: "asc" | "desc";
                 };
                 header?: never;
                 path?: never;
@@ -1359,6 +1595,7 @@ export interface paths {
                     Page?: number;
                     PageSize?: number;
                     Sort?: string;
+                    Direction?: "asc" | "desc";
                     VolunteerCode?: number;
                     ProjectCode?: number;
                     From?: string;
@@ -1668,6 +1905,41 @@ export interface components {
             /** Format: int32 */
             pageSize: number;
         };
+        MonthlyCountDto: {
+            /** Format: int32 */
+            year: number;
+            /** Format: int32 */
+            month: number;
+            /** Format: int32 */
+            count: number;
+            /** Format: double */
+            hours: number;
+        };
+        NamedCountDto: {
+            /** Format: int32 */
+            code: number;
+            name: string;
+            /** Format: int32 */
+            count: number;
+            /** Format: double */
+            hours: number;
+            /** Format: double */
+            value: number;
+        };
+        OverviewStatsDto: {
+            /** Format: int32 */
+            totalVolunteerings: number;
+            /** Format: int32 */
+            activeVolunteers: number;
+            /** Format: double */
+            totalHours: number;
+            /** Format: double */
+            totalValue: number;
+            byMonth: components["schemas"]["MonthlyCountDto"][];
+            byDepartment: components["schemas"]["NamedCountDto"][];
+            byProject: components["schemas"]["NamedCountDto"][];
+            bySubProject: components["schemas"]["NamedCountDto"][];
+        };
         PositionDto: {
             /** Format: int32 */
             positionCode: number;
@@ -1697,6 +1969,23 @@ export interface components {
             projectCode: number;
             projectName: string;
             subProjects: components["schemas"]["SubProjectDto"][];
+        };
+        ProjectStatsDto: {
+            /** Format: int32 */
+            projectCode: number;
+            projectName: string;
+            isDepartment: boolean;
+            /** Format: int32 */
+            totalVolunteerings: number;
+            /** Format: int32 */
+            distinctVolunteers: number;
+            /** Format: double */
+            totalHours: number;
+            /** Format: double */
+            totalValue: number;
+            byMonth: components["schemas"]["MonthlyCountDto"][];
+            byChild: components["schemas"]["NamedCountDto"][];
+            topVolunteers: components["schemas"]["VolunteerRankingRowDto"][];
         };
         SubProjectDto: {
             /** Format: int32 */
@@ -1839,6 +2128,18 @@ export interface components {
             positionCode?: number | null;
             positionName?: string | null;
             projectCodes: number[];
+            tohar?: string | null;
+            ending?: string | null;
+            fathersName?: string | null;
+            shtibel?: string | null;
+            street?: string | null;
+            house?: string | null;
+            city?: string | null;
+            /** Format: int32 */
+            zipCode?: number | null;
+            housePhone?: string | null;
+            cellPhone?: string | null;
+            shver?: string | null;
         };
         VolunteerDtoPagedResult: {
             items: components["schemas"]["VolunteerDto"][];
@@ -1848,6 +2149,51 @@ export interface components {
             page: number;
             /** Format: int32 */
             pageSize: number;
+        };
+        VolunteerRankingRowDto: {
+            /** Format: int32 */
+            volunteerCode: number;
+            firstName?: string | null;
+            familyName?: string | null;
+            /** Format: int32 */
+            count: number;
+            /** Format: double */
+            hours: number;
+            /** Format: double */
+            value: number;
+            /** Format: date */
+            lastDate: string;
+        };
+        VolunteerRankingRowDtoPagedResult: {
+            items: components["schemas"]["VolunteerRankingRowDto"][];
+            /** Format: int32 */
+            totalCount: number;
+            /** Format: int32 */
+            page: number;
+            /** Format: int32 */
+            pageSize: number;
+        };
+        VolunteerStatsDto: {
+            /** Format: int32 */
+            volunteerCode: number;
+            firstName?: string | null;
+            familyName?: string | null;
+            /** Format: int32 */
+            totalVolunteerings: number;
+            /** Format: int32 */
+            totalAsMatcher: number;
+            /** Format: double */
+            totalHours: number;
+            /** Format: double */
+            totalValue: number;
+            /** Format: date */
+            firstDate?: string | null;
+            /** Format: date */
+            lastDate?: string | null;
+            byMonth: components["schemas"]["MonthlyCountDto"][];
+            byWeekday: components["schemas"]["WeekdayCountDto"][];
+            byProject: components["schemas"]["NamedCountDto"][];
+            bySubProject: components["schemas"]["NamedCountDto"][];
         };
         VolunteeringDto: {
             /** Format: int32 */
@@ -1878,6 +2224,12 @@ export interface components {
             page: number;
             /** Format: int32 */
             pageSize: number;
+        };
+        WeekdayCountDto: {
+            /** Format: int32 */
+            dayOfWeek: number;
+            /** Format: int32 */
+            count: number;
         };
     };
     responses: never;

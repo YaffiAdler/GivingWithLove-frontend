@@ -1,0 +1,79 @@
+<div class="page">
+
+  <div class="title">הכנס פרטי התנדבות חדש</div>
+
+  <form [formGroup]="vlntrFrm" class="form-card">
+
+    <div class="form-group">
+      <label>תאריך התנדבות</label>
+      <input class="input"
+             formControlName="dateOfVolunteering"
+             type="date">
+    </div>
+
+    <div class="form-group">
+      <label>קוד מתנדב</label>
+      <app-person-picker [control]="vlntrFrm.controls.volunteerCode"
+                         [search]="searchVolunteers"
+                         [selected]="selectedVolunteer()">
+      </app-person-picker>
+    </div>
+
+    <div class="form-group">
+      <label>קוד אדם עני</label>
+      <app-person-picker [control]="vlntrFrm.controls.poorManCode"
+                         [search]="searchPoorMen">
+      </app-person-picker>
+    </div>
+
+    <div class="form-group">
+      <label>קוד מתאם</label>
+      <app-person-picker [control]="vlntrFrm.controls.matcherCode"
+                         [search]="searchVolunteers"
+                         [selected]="selectedMatcher()">
+      </app-person-picker>
+    </div>
+
+    <div class="form-group">
+      <label>פרויקט</label>
+      <select class="input" formControlName="projectCode">
+        @for (pro of projects(); track pro.projectCode) {
+          @if (pro.projectCode !== pro.domainCode) {
+            <option [ngValue]="pro.projectCode">
+              {{ pro.projectName }}
+            </option>
+          }
+        }
+      </select>
+      @if (listsState() === 'loading') {
+        <app-loading message="טוען פרויקטים..."></app-loading>
+      } @else if (listsState() === 'error') {
+        <app-error-state message="שגיאה בטעינת הפרויקטים" (retry)="loadLists()"></app-error-state>
+      }
+    </div>
+
+    <div class="form-group">
+      <label>תת פרויקט</label>
+      <select class="input" formControlName="subProjectCode">
+        @for (subPro of filteredSubProjects(); track subPro.subProjectCode) {
+          <option [ngValue]="subPro.subProjectCode">
+            {{ subPro.subProjectName }}
+          </option>
+        }
+      </select>
+      @if (listsState() === 'ready'
+           && vlntrFrm.controls.projectCode.value !== null
+           && filteredSubProjects().length === 0) {
+        <app-empty-state message="אין תתי פרויקטים לפרויקט זה"></app-empty-state>
+      }
+    </div>
+
+    <button class="btn"
+            [disabled]="vlntrFrm.invalid"
+            (click)="addVolunteering()">
+      הוסף
+    </button>
+
+  </form>
+
+</div>

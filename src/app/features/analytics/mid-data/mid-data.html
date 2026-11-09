@@ -1,0 +1,39 @@
+<div class="page">
+
+  @if (loadState() === 'loading') {
+    <app-loading></app-loading>
+  } @else if (loadState() === 'error') {
+    <app-error-state message="שגיאה בטעינת האגף" (retry)="load()"></app-error-state>
+  } @else if (department(); as project) {
+  <div class="header">
+    <div class="title">{{ project.projectName }}</div>
+    <div class="subtitle">
+      {{ project.projects.length }} פרויקטים
+    </div>
+  </div>
+
+  @if(project.projects.length){
+    <div class="sub-links">
+      @for (q of project.projects; track q.projectCode) {
+        <a [routerLink]="['/deepDataDisplay', q.projectCode]" class="sub-project">
+          {{ q.projectName }}
+        </a>
+      }
+    </div>
+  } @else {
+    <app-empty-state message="אין פרויקטים באגף זה"></app-empty-state>
+  }
+  } @else {
+    <div class="header">
+      <div class="title">האגף לא נמצא</div>
+    </div>
+  }
+
+  <!-- TODO(FE-04): replace with stats API -->
+  <div class="cards-container">
+    <div class="card">
+      <h2>נתוני הסטטיסטיקה יוצגו כאן בקרוב</h2>
+    </div>
+  </div>
+
+</div>
