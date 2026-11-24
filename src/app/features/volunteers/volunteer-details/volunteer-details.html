@@ -45,17 +45,81 @@
         }
       </tbody>
     </table>
-
-    @if (volunteerings().length) {
-      <h3>פילוח לפי פרויקטים — {{ recentCount }} ההתנדבויות האחרונות</h3>
-      <div class="chart-container">
-        <canvas baseChart type="pie" [data]="projectsChart()" [options]="pieOptions"></canvas>
-      </div>
-
-      <h3>גרף פעילות חודשי — {{ recentCount }} ההתנדבויות האחרונות</h3>
-      <div class="chart-container">
-        <canvas baseChart type="bar" [data]="monthsChart()" [options]="barOptions"></canvas>
-      </div>
-    }
   }
+
+  <section class="activity" aria-labelledby="activity-title">
+    <h3 id="activity-title">פעילות</h3>
+    <app-date-range-filter
+      [range]="initialRange"
+      (rangeChange)="statsRange.set($event)"
+    ></app-date-range-filter>
+
+    @if (statsPending()) {
+      <app-loading message="טוען נתוני פעילות..."></app-loading>
+    } @else if (stats.error()) {
+      <app-error-state message="שגיאה בטעינת נתוני הפעילות" (retry)="stats.reload()"></app-error-state>
+    } @else if (!hasActivity()) {
+      <app-empty-state message="אין פעילות בטווח שנבחר"></app-empty-state>
+    } @else if (loadedStats(); as activity) {
+      <div class="kpi-grid">
+        <app-kpi-card label="התנדבויות" [value]="activity.totalVolunteerings"></app-kpi-card>
+        <app-kpi-card label="שעות" [value]="activity.totalHours" format="decimal"></app-kpi-card>
+        <app-kpi-card label="שווי" [value]="activity.totalValue" format="decimal" unit="₪"></app-kpi-card>
+        <app-kpi-card label="שידוכים כמתאם" [value]="activity.totalAsMatcher"></app-kpi-card>
+      </div>
+
+      <div class="activity-dates">
+        <p><strong>התנדבות ראשונה:</strong> {{ (activity.firstDate | date:'dd/MM/yyyy') | orDash }}</p>
+        <p><strong>התנדבות אחרונה:</strong> {{ (activity.lastDate | date:'dd/MM/yyyy') | orDash }}</p>
+      </div>
+
+      @if (activity.totalVolunteerings > 0) {
+        <h4>התנדבויות לפי חודש</h4>
+        <div class="chart-container">
+          <canvas baseChart type="line" [data]="monthsChart()" [options]="lineOptions"></canvas>
+        </div>
+
+        <div class="chart-grid">
+          <div>
+            <h4>לפי פרויקט</h4>
+            @if (activity.byProject.length) {
+              <div class="chart-container">
+                <canvas
+                  baseChart
+                  type="doughnut"
+                  [data]="projectsChart()"
+                  [options]="doughnutOptions"
+                ></canvas>
+              </div>
+              <p class="chart-note">רק התנדבויות שמשויכות לפרויקט</p>
+            } @else {
+              <app-empty-state message="אין התנדבויות שמשויכות לפרויקט"></app-empty-state>
+            }
+          </div>
+
+          <div>
+            <h4>לפי יום בשבוע</h4>
+            <div class="chart-container">
+              <canvas baseChart type="bar" [data]="weekdaysChart()" [options]="barOptions"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <h4>לפי תת-פרויקט</h4>
+        @if (activity.bySubProject.length) {
+          <div class="chart-container">
+            <canvas
+              baseChart
+              type="bar"
+              [data]="subProjectsChart()"
+              [options]="horizontalBarOptions"
+            ></canvas>
+          </div>
+          <p class="chart-note">רק התנדבויות שמשויכות לתת-פרויקט</p>
+        } @else {
+          <app-empty-state message="אין התנדבויות שמשויכות לתת-פרויקט"></app-empty-state>
+        }
+      }
+    }
+  </section>
 </div>

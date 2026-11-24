@@ -1,19 +1,29 @@
+// The host fills the dialog and only the details box scrolls, so the title stays in view and
+// the dialog surface never shows a second scrollbar.
+// The dialog overlay gets dir="ltr" from Material (the app provides no Directionality), so the
+// page's RTL direction is set here again.
 :host {
+  direction: rtl;
   display: flex;
-  justify-content: center;
-  align-items: flex-start;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+  height: 100%;
   background: rgba(7, 26, 34, 0.9);
-  min-height: 100vh;
   padding: 30px;
   font-family: Arial, sans-serif;
   color: #e0f7fa;
 }
 
 .volunteer-details {
+  box-sizing: border-box;
+  flex: 1 1 auto;
+  min-height: 0;
   width: 100%;
   max-width: 950px;
-  max-height: 80vh;
   overflow-y: auto;
+  // The close button's touch target reaches a few pixels past the edge on narrow windows.
+  overflow-x: hidden;
   background: #0f2a38;
   border: 1px solid #00bcd4;
   border-radius: 18px;
@@ -126,6 +136,56 @@ h3 {
   color: #e0f7fa;
 }
 
+h4 {
+  color: #00e5ff;
+  margin: 25px 0 10px;
+  font-size: 18px;
+}
+
+.activity {
+  margin-top: 10px;
+}
+
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.activity-dates {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 30px;
+  margin-top: 15px;
+}
+
+.activity-dates p {
+  margin: 0;
+}
+
+.activity-dates strong {
+  color: #00e5ff;
+}
+
+// Two charts side by side when there is room; one column on narrow windows.
+.chart-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+  gap: 20px;
+}
+
+// The grid items must be allowed to shrink, otherwise a chart canvas keeps its column wide.
+.chart-grid > div {
+  min-width: 0;
+}
+
+.chart-note {
+  margin: 6px 0 0;
+  font-size: 13px;
+  opacity: 0.8;
+}
+
 .chart-container {
   position: relative;
   height: 420px;
@@ -138,6 +198,10 @@ h3 {
 }
 
 @media (max-width: 768px) {
+  :host {
+    padding: 12px;
+  }
+
   .volunteer-details {
     padding: 18px;
   }
@@ -152,5 +216,6 @@ h3 {
 
   .chart-container {
     height: 340px;
+    padding: 10px;
   }
 }

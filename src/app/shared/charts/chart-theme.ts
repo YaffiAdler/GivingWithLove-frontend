@@ -49,8 +49,8 @@ const RTL_PLUGINS = {
   tooltip: { rtl: true, textDirection: 'rtl' },
 } as const;
 
-/** Responsive pie chart with a right-to-left legend. The container sets the height. */
-export function pieChartOptions(): ChartOptions<'pie'> {
+/** Responsive doughnut chart with a right-to-left legend. The container sets the height. */
+export function doughnutChartOptions(): ChartOptions<'doughnut'> {
   return {
     responsive: true,
     maintainAspectRatio: false,
@@ -70,6 +70,61 @@ export function barChartOptions(): ChartOptions<'bar'> {
         beginAtZero: true,
         ticks: { color: CHART_TEXT_COLOR, precision: 0 },
         grid: { color: CHART_GRID_COLOR },
+      },
+    },
+  };
+}
+
+/** Horizontal bars (long category names on the vertical axis) with whole-number counts. */
+export function horizontalBarChartOptions(): ChartOptions<'bar'> {
+  return {
+    responsive: true,
+    maintainAspectRatio: false,
+    indexAxis: 'y',
+    plugins: RTL_PLUGINS,
+    scales: {
+      x: {
+        beginAtZero: true,
+        ticks: { color: CHART_TEXT_COLOR, precision: 0 },
+        grid: { color: CHART_GRID_COLOR },
+      },
+      y: { ticks: { color: CHART_TEXT_COLOR }, grid: { color: CHART_GRID_COLOR } },
+    },
+  };
+}
+
+/** Axis id of the hours series in the monthly line chart; counts use the default `y` axis. */
+export const HOURS_AXIS_ID = 'hours';
+
+/** Series names, also used as the axis titles so a series and its axis always read the same. */
+export const COUNT_SERIES_LABEL = 'התנדבויות';
+export const HOURS_SERIES_LABEL = 'שעות';
+
+/**
+ * Monthly line chart: counts on the right axis (the reading side in RTL), hours on a second
+ * axis on the left. Only the count axis draws grid lines, so the two scales don't mix.
+ */
+export function monthlyLineChartOptions(): ChartOptions<'line'> {
+  return {
+    responsive: true,
+    maintainAspectRatio: false,
+    interaction: { mode: 'index', intersect: false },
+    plugins: RTL_PLUGINS,
+    scales: {
+      x: { ticks: { color: CHART_TEXT_COLOR }, grid: { color: CHART_GRID_COLOR } },
+      y: {
+        position: 'right',
+        beginAtZero: true,
+        title: { display: true, text: COUNT_SERIES_LABEL, color: CHART_TEXT_COLOR },
+        ticks: { color: CHART_TEXT_COLOR, precision: 0 },
+        grid: { color: CHART_GRID_COLOR },
+      },
+      [HOURS_AXIS_ID]: {
+        position: 'left',
+        beginAtZero: true,
+        title: { display: true, text: HOURS_SERIES_LABEL, color: CHART_TEXT_COLOR },
+        ticks: { color: CHART_TEXT_COLOR },
+        grid: { drawOnChartArea: false },
       },
     },
   };

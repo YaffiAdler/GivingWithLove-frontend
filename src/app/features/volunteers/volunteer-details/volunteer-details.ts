@@ -1,35 +1,45 @@
 import { DatePipe } from '@angular/common';
-import { Component, DestroyRef, inject, OnInit, signal, viewChildren } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Component, computed, DestroyRef, inject, OnInit, signal, viewChildren } from '@angular/core';
+import { rxResource, takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
-import { ChartData } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import { forkJoin } from 'rxjs';
+import { StatsApiService } from '../../../core/api/stats-api.service';
 import { VolunteerApiService } from '../../../core/api/volunteer-api.service';
 import { VolunteeringApiService } from '../../../core/api/volunteering-api.service';
+import { VolunteerStats } from '../../../models/stats.model';
 import { VolunteerDetails as VolunteerDetailsModel } from '../../../models/volunteer.model';
 import { Volunteering } from '../../../models/volunteering.model';
 import {
   barChartOptions,
-  CHART_PALETTE,
-  paletteColors,
-  PIE_SLICE_BORDER,
-  pieChartOptions,
+  doughnutChartOptions,
+  horizontalBarChartOptions,
+  monthlyLineChartOptions,
   provideAppCharts,
 } from '../../../shared/charts/chart-theme';
-import { ErrorState } from '../../../shared/ui/error-state';
-import { LoadState } from '../../../shared/ui/load-state';
+import {
+  toMonthlyLineData,
+  toNamedBarData,
+  toNamedDoughnutData,
+  toWeekdayBarData,
+} from '../../../shared/charts/stats-chart-data';
 import { OrDashPipe } from '../../../shared/pipes/or-dash.pipe';
 import { PersonNamePipe } from '../../../shared/pipes/person-name.pipe';
+import { DateRange, sameDateRange } from '../../../shared/ui/date-range-filter/date-range';
+import { DateRangeFilter } from '../../../shared/ui/date-range-filter/date-range-filter';
 import { EmptyState } from '../../../shared/ui/empty-state';
+import { ErrorState } from '../../../shared/ui/error-state';
+import { KpiCard } from '../../../shared/ui/kpi-card';
+import { LoadState } from '../../../shared/ui/load-state';
 import { Loading } from '../../../shared/ui/loading';
 import { VolunteerDetailsData } from './volunteer-details-data';
 
-/** The dialog shows the volunteer's most recent volunteerings only (one server page, newest first). */
+/** The dialog lists the volunteer's most recent volunteerings only (one server page, newest first). */
 const RECENT_VOLUNTEERINGS_PAGE_SIZE = 100;
 
-const UNNAMED_PROJECT = 'ללא פרויקט';
+/** The activity section opens on "all dates". */
+const ALL_DATES: DateRange = {};
 
 @Component({
   selector: 'app-volunteer-details',
@@ -42,40 +52,81 @@ const UNNAMED_PROJECT = 'ללא פרויקט';
     Loading,
     ErrorState,
     EmptyState,
+    KpiCard,
+    DateRangeFilter,
     PersonNamePipe,
     OrDashPipe,
   ],
   providers: [provideAppCharts()],
-  styleUrls: ['./volunteer-details.scss']
+  styleUrls: ['./volunteer-details.scss'],
 })
 export class VolunteerDetails implements OnInit {
   private readonly volunteerApi = inject(VolunteerApiService);
   private readonly volunteeringApi = inject(VolunteeringApiService);
+  private readonly statsApi = inject(StatsApiService);
   private readonly dialogRef = inject(MatDialogRef<VolunteerDetails>);
   private readonly destroyRef = inject(DestroyRef);
   private readonly data = inject<VolunteerDetailsData>(MAT_DIALOG_DATA);
 
-  readonly recentCount = RECENT_VOLUNTEERINGS_PAGE_SIZE;
   readonly loadState = signal<LoadState>('loading');
   readonly volunteer = signal<VolunteerDetailsModel | null>(null);
   readonly volunteerings = signal<Volunteering[]>([]);
-  readonly projectsChart = signal<ChartData<'pie'>>({ labels: [], datasets: [] });
-  readonly monthsChart = signal<ChartData<'bar'>>({ labels: [], datasets: [] });
 
-  readonly pieOptions = pieChartOptions();
+  readonly initialRange = ALL_DATES;
+  readonly statsRange = signal<DateRange>(ALL_DATES, { equal: sameDateRange });
+
+  /** Set once the open animation has finished (immediately when animations are off). */
+  private readonly opened = signal(false);
+
+  /**
+   * One request per range; a new range cancels the request still in flight. Nothing is
+   * requested before the dialog is open: undefined params keep the resource idle.
+   */
+  readonly stats = rxResource({
+    params: () =>
+      this.opened()
+        ? { volunteerCode: this.data.volunteerCode, range: this.statsRange() }
+        : undefined,
+    stream: ({ params }) => this.statsApi.volunteer(params.volunteerCode, params.range),
+  });
+
+  /** The idle wait for the dialog to open shows as loading, not as "no activity". */
+  readonly statsPending = computed(() => !this.opened() || this.stats.isLoading());
+
+  /** The loaded stats, or null while loading or after an error (reading value() then throws). */
+  readonly loadedStats = computed<VolunteerStats | null>(() =>
+    this.stats.hasValue() ? this.stats.value() : null,
+  );
+  readonly hasActivity = computed(() => {
+    const stats = this.loadedStats();
+    return stats !== null && (stats.totalVolunteerings > 0 || stats.totalAsMatcher > 0);
+  });
+
+  readonly monthsChart = computed(() => toMonthlyLineData(this.loadedStats()?.byMonth ?? []));
+  readonly projectsChart = computed(() => toNamedDoughnutData(this.loadedStats()?.byProject ?? []));
+  readonly subProjectsChart = computed(() => toNamedBarData(this.loadedStats()?.bySubProject ?? []));
+  readonly weekdaysChart = computed(() => toWeekdayBarData(this.loadedStats()?.byWeekday ?? []));
+
+  readonly lineOptions = monthlyLineChartOptions();
+  readonly doughnutOptions = doughnutChartOptions();
+  readonly horizontalBarOptions = horizontalBarChartOptions();
   readonly barOptions = barChartOptions();
 
   private readonly charts = viewChildren(BaseChartDirective);
 
   constructor() {
-    // Chart.js measures its container when it draws. A chart drawn during the open animation
-    // measured a scaled-down dialog, so it is measured again once the dialog is open.
+    // The stats start loading only now. Chart.js measures its container when it draws, and a
+    // chart drawn during the open animation measured a scaled-down dialog, so any chart that
+    // already exists is measured again.
     // Subscribed in the constructor: without animations the dialog finishes opening in a
     // microtask right after it is created, before ngOnInit runs.
     this.dialogRef
       .afterOpened()
       .pipe(takeUntilDestroyed())
-      .subscribe(() => this.charts().forEach((chart) => chart.chart?.resize()));
+      .subscribe(() => {
+        this.opened.set(true);
+        this.charts().forEach((chart) => chart.chart?.resize());
+      });
   }
 
   ngOnInit() {
@@ -98,13 +149,8 @@ export class VolunteerDetails implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: ({ volunteer, volunteerings }) => {
-          const oldestFirst = [...volunteerings.items].sort(
-            (a, b) => toTime(a.dateOfVolunteering) - toTime(b.dateOfVolunteering),
-          );
           this.volunteer.set(volunteer);
-          this.volunteerings.set(oldestFirst);
-          this.projectsChart.set(countByProject(oldestFirst));
-          this.monthsChart.set(countByMonth(oldestFirst));
+          this.volunteerings.set(volunteerings.items);
           this.loadState.set('ready');
         },
         // The error interceptor already showed the message; the dialog shows its error state.
@@ -115,49 +161,4 @@ export class VolunteerDetails implements OnInit {
   close() {
     this.dialogRef.close();
   }
-}
-
-/** Slices of the recent volunteerings per project name. */
-function countByProject(volunteerings: Volunteering[]): ChartData<'pie'> {
-  const counts = countBy(volunteerings, (v) => v.projectName?.trim() || UNNAMED_PROJECT);
-  return {
-    labels: [...counts.keys()],
-    datasets: [
-      {
-        data: [...counts.values()],
-        backgroundColor: paletteColors(counts.size),
-        ...PIE_SLICE_BORDER,
-      },
-    ],
-  };
-}
-
-/** Bars of the recent volunteerings per month, oldest month first (the input is sorted). */
-function countByMonth(volunteerings: Volunteering[]): ChartData<'bar'> {
-  const counts = countBy(volunteerings, (v) =>
-    new Date(v.dateOfVolunteering).toLocaleString('default', { month: 'short', year: 'numeric' }),
-  );
-  return {
-    labels: [...counts.keys()],
-    datasets: [
-      {
-        label: 'התנדבויות לפי חודשים',
-        data: [...counts.values()],
-        backgroundColor: CHART_PALETTE[1],
-      },
-    ],
-  };
-}
-
-function countBy<T>(items: T[], keyOf: (item: T) => string): Map<string, number> {
-  const counts = new Map<string, number>();
-  for (const item of items) {
-    const key = keyOf(item);
-    counts.set(key, (counts.get(key) ?? 0) + 1);
-  }
-  return counts;
-}
-
-function toTime(date: string): number {
-  return new Date(date).getTime();
 }
