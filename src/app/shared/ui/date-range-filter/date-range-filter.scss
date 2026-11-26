@@ -1,0 +1,56 @@
+.date-range-filter {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 20px;
+}
+
+.date-range-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.date-range-preset {
+  padding: 6px 14px;
+  border: 1px solid #00bcd4;
+  border-radius: 999px;
+  background: transparent;
+  color: #e0f7fa;
+  cursor: pointer;
+}
+
+.date-range-preset.active {
+  background: #00bcd4;
+  color: #002a33;
+}
+
+.date-range-inputs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.date-range-inputs label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.date-range-inputs input {
+  padding: 6px 8px;
+  border: 1px solid #00bcd4;
+  border-radius: 8px;
+  background: #071a22;
+  color: #e0f7fa;
+  color-scheme: dark;
+}
+
+.date-range-inputs input[aria-invalid='true'] {
+  border-color: #ff8a80;
+}
+
+.date-range-error {
+  flex-basis: 100%;
+  color: #ff8a80;
+}
